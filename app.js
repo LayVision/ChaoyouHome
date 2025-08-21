@@ -1410,66 +1410,79 @@ async function renderProfilePage(userId) {
             profileCol.appendChild(editBtn);
         }
         listingsCol.appendChild(createElement('h4', ['text-2xl', 'font-bold', 'mb-4', 'text-slate-800'], `ประกาศทั้งหมด (${totalListings})`));
-        const listingsContainer = createElement('div', ['grid', 'grid-cols-1', 'md:grid-cols-2', 'gap-6']);
-        const paginationContainer = createElement('div', ['md:col-span-2', 'flex', 'justify-center', 'items-center', 'mt-8', 'gap-2']);
+        const listingsContainer = createElement('div', ['space-y-4']);
+        const paginationContainer = createElement('div', ['flex', 'justify-center', 'items-center', 'mt-8', 'gap-2']);
+        
         if (pageListings.length === 0) {
-            listingsContainer.innerHTML = '<div class="md:col-span-2 text-center text-slate-500 mt-6 p-8 border border-dashed border-slate-300 rounded-lg bg-white">ผู้ใช้ยังไม่มีประกาศ</div>';
+            listingsContainer.innerHTML = '<div class="text-center text-slate-500 mt-6 p-8 border border-dashed border-slate-300 rounded-lg bg-white">ผู้ใช้ยังไม่มีประกาศ</div>';
         } else {
             pageListings.forEach(listing => {
-                const listingCard = createElement('div', ['bg-white', 'rounded-xl', 'shadow-md', 'hover:shadow-lg', 'transition-shadow', 'border', 'border-slate-200', 'flex', 'flex-col']);
-                const cardContent = createElement('div', ['p-4', 'flex-grow', 'flex', 'flex-col']);
-                const imageLink = createElement('a', [], '', { href: `#listing/${listing.id}` });
+                const listItem = createElement('div', ['bg-white', 'rounded-xl', 'shadow-md', 'hover:shadow-lg', 'transition-shadow', 'border', 'border-slate-200', 'flex', 'flex-col', 'md:flex-row', 'items-stretch', 'overflow-hidden']);
+                
+                // Image Section
+                const imageLink = createElement('a', ['block', 'md:w-48', 'flex-shrink-0'], '', { href: `#listing/${listing.id}` });
                 const imageUrl = listing.imageUrls?.[0] || 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป';
-                const image = createElement('img', ['w-full', 'h-40', 'object-cover', 'rounded-lg', 'flex-shrink-0'], '', { src: imageUrl });
+                const image = createElement('img', ['w-full', 'h-40', 'md:h-full', 'object-cover'], '', { src: imageUrl });
                 image.onerror = () => { image.src = 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป'; };
                 imageLink.appendChild(image);
-                const textLink = createElement('a', ['flex-1', 'mt-4', 'flex', 'flex-col'], '', { href: `#listing/${listing.id}` });
-                textLink.appendChild(createElement('h5', ['font-bold', 'text-lg', 'flex-grow', 'text-slate-800'], listing.title));
-                textLink.appendChild(createElement('p', ['text-sm', 'text-slate-500'], `${listing.district}, ${listing.province}`));
-                const footerDiv = createElement('div', ['flex', 'justify-between', 'items-center', 'mt-2']);
-                footerDiv.appendChild(createElement('p', ['text-md', 'font-semibold', 'text-indigo-600'], getPriceDisplay(listing.priceRent)));
-                const dateP = createElement('p', ['text-xs', 'text-slate-500'], formatTimestamp(listing.createdAt));
-                if (listing.updatedAt && listing.createdAt && listing.updatedAt.seconds > listing.createdAt.seconds + 10) {
-                    dateP.innerHTML += ` <span class="text-amber-600">(แก้ไข)</span>`;
-                }
-                footerDiv.appendChild(dateP);
-                textLink.appendChild(footerDiv);
-                cardContent.append(imageLink, textLink);
-                const boostSection = createElement('div', ['p-4', 'mt-auto', 'pt-3', 'border-t', 'border-slate-200', 'flex', 'items-center', 'justify-between', 'bg-slate-50', 'rounded-b-xl']);
+
+                // Content Section
+                const contentDiv = createElement('div', ['p-4', 'flex', 'flex-col', 'flex-grow']);
+                const titleLink = createElement('a', [], '', { href: `#listing/${listing.id}` });
+                titleLink.appendChild(createElement('h5', ['font-bold', 'text-lg', 'text-slate-800', 'hover:text-indigo-600', 'transition-colors'], listing.title));
+                contentDiv.appendChild(titleLink);
+
+                const detailsContainer = createElement('div', ['flex', 'flex-wrap', 'items-center', 'gap-x-4', 'gap-y-1', 'text-sm', 'text-slate-500', 'mt-1']);
+                const priceSpan = createElement('span', ['font-semibold', 'text-indigo-600', 'text-base'], getPriceDisplay(listing.priceRent));
+                const locationSpan = createElement('span');
+                locationSpan.innerHTML = `<i class="fas fa-map-marker-alt mr-1"></i> ${listing.district}, ${listing.province}`;
+                const dateSpan = createElement('span');
+                const dateText = formatTimestamp(listing.createdAt);
+                const editedText = (listing.updatedAt && listing.createdAt && listing.updatedAt.seconds > listing.createdAt.seconds + 10) ? ` <span class="text-amber-600">(แก้ไข)</span>` : '';
+                dateSpan.innerHTML = `<i class="fas fa-calendar-alt mr-1"></i> ${dateText}${editedText}`;
+                detailsContainer.append(priceSpan, locationSpan, dateSpan);
+                contentDiv.appendChild(detailsContainer);
+                
+                contentDiv.appendChild(createElement('div', ['flex-grow']));
+                contentDiv.appendChild(createElement('p', ['text-xs', 'text-slate-400', 'mt-2'], `รหัสประกาศ: ${listing.id}`));
+
+                // Boost/Action Section
+                const boostSection = createElement('div', ['p-4', 'flex-shrink-0', 'flex', 'flex-col', 'items-center', 'justify-center', 'bg-slate-50', 'md:w-56', 'border-t', 'md:border-t-0', 'md:border-l', 'border-slate-200']);
                 const now = new Date();
                 const isBoostedAndActive = listing.isBoosted && listing.boostExpiryDate && listing.boostExpiryDate.toDate() > now;
+                
                 if (listing.boostStatus === 'pending') {
-                    const status = createElement('p', ['text-sm', 'font-semibold', 'text-yellow-600'], 'รออนุมัติ');
+                    const status = createElement('p', ['text-sm', 'font-semibold', 'text-yellow-600', 'text-center'], 'รออนุมัติ');
                     status.prepend(createElement('i', ['fas', 'fa-clock', 'mr-2']));
                     boostSection.appendChild(status);
                 } else if (isBoostedAndActive) {
-                    const timer = createElement('p', ['text-sm', 'font-semibold', 'text-emerald-600'], formatTimeRemaining(listing.boostExpiryDate));
+                    const timer = createElement('p', ['text-sm', 'font-semibold', 'text-emerald-600', 'text-center'], formatTimeRemaining(listing.boostExpiryDate));
                     timer.prepend(createElement('i', ['fas', 'fa-check-circle', 'mr-2']));
                     boostSection.appendChild(timer);
                     if (currentUser && currentUser.role === 'admin') {
-                        const removeBtn = createElement('button', ['text-xs', 'text-rose-600', 'hover:underline'], 'เอาลง');
+                        const removeBtn = createElement('button', ['text-xs', 'text-rose-600', 'hover:underline', 'mt-2'], 'เอาลง');
                         removeBtn.onclick = (e) => { e.stopPropagation(); removeBoost(listing.id); };
                         boostSection.appendChild(removeBtn);
                     }
                 } else if (listing.boostStatus === 'rejected') {
-                    const status = createElement('p', ['text-sm', 'font-semibold', 'text-rose-600'], 'ไม่สำเร็จ');
+                    const status = createElement('p', ['text-sm', 'font-semibold', 'text-rose-600', 'mb-2', 'text-center'], 'ไม่สำเร็จ');
                     status.prepend(createElement('i', ['fas', 'fa-times-circle', 'mr-2']));
-                    boostSection.appendChild(status);
                     const boostBtn = createElement('button', ['py-1', 'px-3', 'bg-purple-600', 'text-white', 'font-bold', 'rounded-md', 'hover:bg-purple-700', 'text-xs', 'transition-colors']);
                     boostBtn.innerHTML = '<i class="fas fa-rocket mr-1"></i>ลองใหม่';
                     boostBtn.onclick = (e) => { e.stopPropagation(); openBoostModal(listing.id); };
-                    boostSection.appendChild(boostBtn);
-                }
-                else {
+                    boostSection.append(status, boostBtn);
+                } else {
                     const boostBtn = createElement('button', ['w-full', 'py-2', 'bg-purple-600', 'text-white', 'font-bold', 'rounded-md', 'hover:bg-purple-700', 'text-sm', 'transition-colors']);
                     boostBtn.innerHTML = '<i class="fas fa-rocket mr-2"></i>ดันโพสต์';
                     boostBtn.onclick = (e) => { e.stopPropagation(); openBoostModal(listing.id); };
                     boostSection.appendChild(boostBtn);
                 }
-                listingCard.append(cardContent, boostSection);
-                listingsContainer.appendChild(listingCard);
+                
+                listItem.append(imageLink, contentDiv, boostSection);
+                listingsContainer.appendChild(listItem);
             });
         }
+
         listingsCol.append(listingsContainer, paginationContainer);
         renderProfilePagination(paginationContainer, totalPages, userId);
         mainGrid.append(profileCol, listingsCol);
