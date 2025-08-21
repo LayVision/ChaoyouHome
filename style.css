@@ -1,0 +1,131 @@
+/* Base styles */
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Modal styles */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 40;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#boostModal,
+#adminApproveBoostModal,
+#profilePictureModal {
+    z-index: 60;
+}
+
+#alertModal,
+#confirmModal {
+    z-index: 70;
+}
+
+#lightboxModal {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 80;
+}
+
+/* Custom badge for boosted listings */
+.boosted-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: #ffc107;
+    color: #212529;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+/* Slideshow transition */
+.slide {
+    transition: opacity 1s ease-in-out;
+}
+
+.upload-preview-container {
+    position: relative;
+}
+
+.upload-preview-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 2px solid #ddd;
+}
+
+.upload-preview-img.is-cover {
+    border-color: #f59e0b;
+    /* amber-500 */
+}
+
+.set-cover-btn {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.set-cover-btn.is-cover {
+    background-color: #f59e0b;
+}
+
+/* Admin page specific styles */
+#admin-view .admin-sidebar-link {
+    transition: background-color 0.2s, color 0.2s;
+}
+
+#admin-view .admin-sidebar-link.active {
+    background-color: #3b82f6;
+    /* bg-blue-600 */
+    color: white;
+    font-weight: 700;
+}
+
+/* Boost Modal Styles */
+.boost-plan-card {
+    border: 2px solid #e5e7eb;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.boost-plan-card.selected {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
