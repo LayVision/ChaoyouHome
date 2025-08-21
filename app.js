@@ -750,7 +750,7 @@ function populateGrid(gridElement, listings, emptyMessage) {
     listings.forEach(listing => {
         const card = createElement('div', ['bg-white', 'rounded-xl', 'shadow-md', 'overflow-hidden', 'transform', 'hover:-translate-y-1', 'transition-all', 'duration-300', 'cursor-pointer', 'relative', 'flex', 'flex-col', 'border', 'border-slate-200', 'hover:shadow-lg']);
         const imageUrl = listing.imageUrls?.[0] || 'https://placehold.co/600x400/e2e8f0/64748b?text=ไม่มีรูปภาพ';
-        const image = createElement('img', ['w-full', 'h-48', 'object-cover'], '', { src: imageUrl, alt: listing.title });
+        const image = createElement('img', ['w-full', 'h-24', 'object-cover'], '', { src: imageUrl, alt: listing.title });
         image.onerror = () => { image.src = 'https://placehold.co/600x400/e2e8f0/64748b?text=รูปภาพเสียหาย'; };
         if (listing.isBoosted) {
             const badge = createElement('div', ['boosted-badge'], ' ประกาศแนะนำ');
