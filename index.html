@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaoyou Home - หาบ้านและคอนโดเช่า</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Chaoyou Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">หน้าแรก</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="new-listing.html">ลงประกาศฟรี</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">เข้าสู่ระบบ</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="profile.html">โปรไฟล์</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header with Cover Slide -->
+    <header>
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active" style="background-image: url('assets/images/slide1.jpg')">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>คอนโดมิเนียมใจกลางเมือง</h5>
+                        <p>ใช้ชีวิตอย่างมีสไตล์ในทำเลที่ดีที่สุด</p>
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('assets/images/slide2.jpg')">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>บ้านเดี่ยวสำหรับครอบครัว</h5>
+                        <p>พื้นที่กว้างขวาง ความสุขที่ไม่สิ้นสุด</p>
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('assets/images/slide3.jpg')">
+                     <div class="carousel-caption d-none d-md-block">
+                        <h5>ห้องเช่าดีไซน์โมเดิร์น</h5>
+                        <p>ตกแต่งครบ พร้อมเข้าอยู่ได้ทันที</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <h2 class="text-center mb-4">ประกาศล่าสุด</h2>
+        <div class="row" id="latest-listings">
+            <!-- Listing items will be injected here by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-4">
+        <p>&copy; 2025 Chaoyou Home (chaoyouhome.online)</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase JS -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
