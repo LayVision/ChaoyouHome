@@ -1544,10 +1544,12 @@ function router() {
         generalListingsCurrentPage = parseInt(params.get('page'), 10) || 1;
         updateFilterUIFromParams(params);
         fetchListings(filters, fromListing);
-    } else if (newHash === '#admin') {
+    } else if (newHash.startsWith('#admin')) {
         if (currentUser && currentUser.role === 'admin') {
+            const parts = newHash.split('/');
+            const activeTab = parts[1] || 'dashboard'; // Default to dashboard
             adminView.classList.remove('hidden');
-            renderAdminView('dashboard');
+            renderAdminView(activeTab);
         } else {
             navigateToHome();
             if (currentUser) {
@@ -1595,7 +1597,7 @@ function resetFilterUI() {
 function navigateToHome() { window.location.hash = ''; }
 function navigateToListing(id) { window.location.hash = `#listing/${id}`; }
 function navigateToProfile(id) { window.location.hash = `#profile/${id}`; }
-function navigateToAdmin() { window.location.hash = '#admin'; }
+function navigateToAdmin() { window.location.hash = '#admin/dashboard'; }
 
 const backdrop = document.getElementById('modal-backdrop');
 function openModal(modalId) {
@@ -1753,11 +1755,11 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.getElementById('admin-dashboard-link').addEventListener('click', (e) => { e.preventDefault(); renderAdminView('dashboard'); });
-    document.getElementById('admin-listings-link').addEventListener('click', (e) => { e.preventDefault(); renderAdminView('listings'); });
-    document.getElementById('admin-users-link').addEventListener('click', (e) => { e.preventDefault(); renderAdminView('users'); });
-    document.getElementById('admin-boosts-link').addEventListener('click', (e) => { e.preventDefault(); renderAdminView('boosts'); });
-    document.getElementById('admin-boosted-link').addEventListener('click', (e) => { e.preventDefault(); renderAdminView('boosted'); });
+    document.getElementById('admin-dashboard-link').addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#admin/dashboard'; });
+    document.getElementById('admin-listings-link').addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#admin/listings'; });
+    document.getElementById('admin-users-link').addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#admin/users'; });
+    document.getElementById('admin-boosts-link').addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#admin/boosts'; });
+    document.getElementById('admin-boosted-link').addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#admin/boosted'; });
 
     document.getElementById('confirm-modal-cancel-btn').addEventListener('click', () => { closeModal('confirmModal'); confirmCallback = null; });
     document.getElementById('confirm-modal-confirm-btn').addEventListener('click', () => { if (typeof confirmCallback === 'function') { confirmCallback(); } closeModal('confirmModal'); confirmCallback = null; });
