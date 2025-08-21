@@ -380,8 +380,7 @@
             <div class="mt-6 flex justify-end gap-4">
                 <button type="button" data-close-modal="editProfileModal"
                     class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">ยกเลิก</button>
-                <button type="submit"
-                    class="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">บันทึก</button>
+                <button type="submit" class="btn-edit-profile">แก้ไขโปรไฟล์</button>
             </div>
         </form>
     </div>
@@ -451,9 +450,9 @@
         <form id="admin-approve-boost-form">
             <div id="admin-boost-plans-container" class="space-y-3 mb-6">
             </div>
-            <div class="flex justify-end gap-4">
+            <div class="flex justify-center gap-4">
                 <button type="button" data-close-modal="adminApproveBoostModal"
-                    class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">ยกเลิก</button>
+                    class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-400">ยกเลิก</button>
                 <button type="submit"
                     class="px-6 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600">อนุมัติ</button>
             </div>
@@ -483,6 +482,7 @@
     <input type="file" id="profile-picture-upload" class="hidden" accept="image/*">
 
 
+
     <div id="alertModal" class="modal w-11/12 md:w-1/3 bg-white rounded-xl shadow-2xl p-8">
         <h3 id="alert-modal-title" class="text-xl font-bold mb-4 text-center">แจ้งเตือน</h3>
         <p id="alert-modal-text" class="text-center mb-6"></p>
@@ -504,7 +504,7 @@
 
     <div id="lightboxModal" class="modal-backdrop items-center justify-center p-4">
         <div class="relative">
-            <img id="lightboxImage" src="" class="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg">
+            <img id="lightboxImage" src="/placeholder.svg" class="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg">
             <button id="lightbox-close-btn"
                 class="absolute -top-3 -right-3 bg-white rounded-full h-8 w-8 flex items-center justify-center text-2xl text-black leading-none">&times;</button>
         </div>
