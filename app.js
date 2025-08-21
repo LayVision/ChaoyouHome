@@ -150,12 +150,14 @@ function formatTimeRemaining(expiryDate) {
 
     const days = Math.floor(diffInSeconds / 86400);
     const hours = Math.floor((diffInSeconds % 86400) / 3600);
-    const minutes = Math.floor((diffInSeconds % 3600) / 60);
+
+    if (days === 0 && hours === 0) {
+        return 'เหลือน้อยกว่า 1 ชั่วโมง';
+    }
 
     let result = 'เหลือ ';
     if (days > 0) result += `${days} วัน `;
     if (hours > 0) result += `${hours} ชั่วโมง `;
-    if (days === 0 && hours < 24) result += `${minutes} นาที`;
 
     return result.trim();
 }
@@ -875,7 +877,7 @@ async function renderListingDetailPage(listingId) {
 
             if (listing.boostStatus === 'pending') {
                 boostBtn.innerHTML = '<i class="fas fa-clock mr-2"></i>รอการอนุมัติ';
-                boostBtn.classList.add('bg-yellow-500', 'cursor-not-allowed');
+                boostBtn.classList.add('bg-amber-500', 'cursor-not-allowed');
                 boostBtn.disabled = true;
             } else if (isBoostedAndActive) {
                 boostBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>ดันโพสต์แล้ว';
@@ -1525,7 +1527,7 @@ async function renderProfilePage(userId) {
                 const isBoostedAndActive = listing.isBoosted && listing.boostExpiryDate && listing.boostExpiryDate.toDate() > now;
                 
                 if (listing.boostStatus === 'pending') {
-                    const status = createElement('p', ['text-sm', 'font-semibold', 'text-yellow-600', 'text-center'], 'รออนุมัติ');
+                    const status = createElement('p', ['text-sm', 'font-semibold', 'text-amber-600', 'text-center'], 'รออนุมัติ');
                     status.prepend(createElement('i', ['fas', 'fa-clock', 'mr-2']));
                     boostSection.appendChild(status);
                 } else if (isBoostedAndActive) {
