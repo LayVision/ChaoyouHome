@@ -1422,7 +1422,7 @@ async function renderProfilePage(userId) {
                 // Image Section
                 const imageLink = createElement('a', ['block', 'md:w-48', 'flex-shrink-0'], '', { href: `#listing/${listing.id}` });
                 const imageUrl = listing.imageUrls?.[0] || 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป';
-                const image = createElement('img', ['w-full', 'h-25', 'object-cover'], '', { src: imageUrl });
+                const image = createElement('img', ['w-full', 'h-60', 'object-cover'], '', { src: imageUrl });
                 image.onerror = () => { image.src = 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป'; };
                 imageLink.appendChild(image);
 
