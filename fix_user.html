@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fix Missing User Document</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f0f0; padding: 20px; }
+        .container { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; max-width: 500px; margin: 40px auto; }
+        h1 { color: #333; }
+        p { color: #666; }
+        button { background-color: #dc3545; color: white; border: none; padding: 15px 30px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s; }
+        button:hover { background-color: #c82333; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        #status { margin-top: 20px; font-weight: bold; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Fix Missing User Profile</h1>
+        <p>This page will create the missing document in the 'users' collection for the user with email 'coxubu@gmail.com'.</p>
+        <button id="fix-button">Create User Document</button>
+        <p id="status">Status: Ready</p>
+    </div>
+
+    <script type="module">
+        // Import the necessary Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Your Firebase project configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjeZHb1xsD9wKeey1I5EJDSR1SQHOUsMs",
+            authDomain: "chaoyou-home-873d0.firebaseapp.com",
+            projectId: "chaoyou-home-873d0",
+            storageBucket: "chaoyou-home-873d0.appspot.com",
+            messagingSenderId: "179401909066",
+            appId: "1:179401909066:web:7416d3619906527a8d97b3"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Get references to the HTML elements
+        const fixButton = document.getElementById('fix-button');
+        const statusEl = document.getElementById('status');
+
+        // This is the main function that runs when you click the button
+        async function createMissingUserDocument() {
+            fixButton.disabled = true;
+            statusEl.textContent = 'Status: Working...';
+            statusEl.style.color = 'orange';
+
+            // The user ID and data from your logs
+            const userId = "aFV9LlOyvPhTHbY8cArmXWbHwG03";
+            const userEmail = "coxubu@gmail.com";
+            const userName = "coxubu";
+
+            // Define the document location and the data to be saved
+            const userDocRef = doc(db, "users", userId);
+            const userData = {
+                username: userName,
+                username_lowercase: userName.toLowerCase(),
+                email: userEmail,
+                createdAt: serverTimestamp(),
+                phone: '',
+                lineId: '',
+                photoURL: ''
+            };
+
+            try {
+                // Try to write the data to Firestore
+                await setDoc(userDocRef, userData);
+                statusEl.textContent = 'Status: SUCCESS! The user document has been created.';
+                statusEl.style.color = 'green';
+                console.log('Successfully created the user document.');
+            } catch (error) {
+                // If it fails, show an error
+                statusEl.textContent = 'Status: ERROR! Could not create document. Check console for details.';
+                statusEl.style.color = 'red';
+                console.error("Error creating document: ", error);
+            }
+        }
+
+        // Listen for clicks on the button
+        fixButton.addEventListener('click', createMissingUserDocument);
+    </script>
+
+</body>
+</html>
