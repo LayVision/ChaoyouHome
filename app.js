@@ -258,10 +258,10 @@ function updateNavUI(user) {
         mobileNavLoggedOutView.classList.add('hidden');
         mobileNavLoggedInView.innerHTML = '';
 
-        const infoContainer = createElement('div', ['p-4', 'border-b']);
+        const infoContainer = createElement('div', ['p-4', 'border-b', 'border-slate-200']);
         const flexContainer = createElement('div', ['flex', 'items-center', 'gap-3']);
 
-        const mobilePicContainer = createElement('div', ['w-12', 'h-12', 'bg-blue-500', 'rounded-full', 'flex', 'items-center', 'justify-center', 'text-white', 'text-2xl', 'font-bold', 'overflow-hidden']);
+        const mobilePicContainer = createElement('div', ['w-12', 'h-12', 'bg-indigo-500', 'rounded-full', 'flex', 'items-center', 'justify-center', 'text-white', 'text-2xl', 'font-bold', 'overflow-hidden']);
         if (user.photoURL) {
             mobilePicContainer.appendChild(createElement('img', ['w-full', 'h-full', 'object-cover'], '', { src: user.photoURL }));
         } else {
@@ -269,14 +269,14 @@ function updateNavUI(user) {
         }
 
         const textContainer = createElement('div');
-        textContainer.appendChild(createElement('p', ['font-semibold'], user.username));
-        textContainer.appendChild(createElement('p', ['text-sm', 'text-gray-500'], user.email));
+        textContainer.appendChild(createElement('p', ['font-semibold', 'text-slate-800'], user.username));
+        textContainer.appendChild(createElement('p', ['text-sm', 'text-slate-500'], user.email));
         flexContainer.append(mobilePicContainer, textContainer);
         infoContainer.appendChild(flexContainer);
 
         const linksContainer = createElement('div', ['p-2', 'space-y-1']);
         const createMobileLink = (text, iconClass, handler) => {
-            const link = createElement('a', ['block', 'text-left', 'px-4', 'py-3', 'text-gray-700', 'rounded-lg', 'hover:bg-gray-100'], '', { href: '#' });
+            const link = createElement('a', ['block', 'text-left', 'px-4', 'py-3', 'text-slate-700', 'rounded-lg', 'hover:bg-slate-100'], '', { href: '#' });
             const icon = createElement('i', ['mr-2', 'w-5', 'text-center', ...iconClass.split(' ')]);
             link.appendChild(icon);
             link.append(text);
@@ -292,10 +292,10 @@ function updateNavUI(user) {
             linksContainer.appendChild(createMobileLink('Admin Panel', 'fas fa-user-shield', navigateToAdmin));
         }
 
-        linksContainer.appendChild(createElement('hr', ['my-1']));
+        linksContainer.appendChild(createElement('hr', ['my-1', 'border-slate-200']));
         const logoutLink = createMobileLink('ออกจากระบบ', 'fas fa-sign-out-alt', handleLogout);
-        logoutLink.classList.remove('text-gray-700', 'hover:bg-gray-100');
-        logoutLink.classList.add('text-red-500', 'hover:bg-red-50');
+        logoutLink.classList.remove('text-slate-700', 'hover:bg-slate-100');
+        logoutLink.classList.add('text-rose-600', 'hover:bg-rose-50');
         linksContainer.appendChild(logoutLink);
         mobileNavLoggedInView.append(infoContainer, linksContainer);
 
@@ -479,7 +479,7 @@ function renderImagePreviews() {
         const isCover = index === 0;
         const img = createElement('img', ['upload-preview-img']);
         if (isCover) img.classList.add('is-cover');
-        const removeBtn = createElement('button', ['absolute', 'top-1', 'left-1', 'bg-red-600', 'text-white', 'rounded-full', 'w-5', 'h-5', 'flex', 'items-center', 'justify-center', 'text-xs', 'font-bold'], '×', { title: 'ลบรูปนี้', type: 'button' });
+        const removeBtn = createElement('button', ['absolute', 'top-1', 'left-1', 'bg-rose-600', 'text-white', 'rounded-full', 'w-5', 'h-5', 'flex', 'items-center', 'justify-center', 'text-xs', 'font-bold'], '×', { title: 'ลบรูปนี้', type: 'button' });
         removeBtn.onclick = () => {
             if (item.type === 'existing') { existingImageUrls.splice(index, 1); }
             else { selectedFiles.splice(index - existingImageUrls.length, 1); }
@@ -627,7 +627,7 @@ async function fetchListings(filters = {}, fromListing = false) {
         renderListings(filteredListings, Object.keys(filters).length > 0 && Object.values(filters).some(v => v));
     } catch (error) {
         console.error("Error fetching listings: ", error);
-        listingsGrid.innerHTML = `<p class="col-span-full text-center text-red-500">เกิดข้อผิดพลาด: ${error.message}</p>`;
+        listingsGrid.innerHTML = `<p class="col-span-full text-center text-rose-600">เกิดข้อผิดพลาด: ${error.message}</p>`;
     } finally {
         loadingSpinner.style.display = 'none';
         if (fromListing) {
@@ -652,7 +652,7 @@ function renderListings(listings, isSearchView = false) {
     } else {
         boostedListingsContainer.style.display = 'block';
         generalListingsContainer.style.display = 'block';
-        document.getElementById('listings-title').innerHTML = 'ประกาศแนะนำ <i class="fas fa-star text-yellow-400"></i>';
+        document.getElementById('listings-title').innerHTML = 'ประกาศแนะนำ <i class="fas fa-star text-amber-400"></i>';
         document.getElementById('general-listings-title').textContent = 'ประกาศทั่วไป';
 
         currentBoostedListings = listings.filter(l => l.isBoosted);
@@ -692,12 +692,12 @@ function renderBoostedPaginationControls() {
     if (totalPages <= 1) return;
 
     for (let i = 1; i <= totalPages; i++) {
-        const pageButton = createElement('button', ['px-4', 'py-2', 'border', 'rounded-lg', 'transition-colors', 'text-sm']);
+        const pageButton = createElement('button', ['px-4', 'py-2', 'border', 'rounded-md', 'transition-colors', 'text-sm']);
         pageButton.textContent = i;
         if (i === boostedListingsCurrentPage) {
-            pageButton.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+            pageButton.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
         } else {
-            pageButton.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+            pageButton.classList.add('bg-white', 'text-slate-700', 'hover:bg-slate-100', 'border-slate-300');
         }
         pageButton.onclick = () => {
             const params = new URLSearchParams(window.location.hash.substring(window.location.hash.indexOf('?')));
@@ -716,12 +716,12 @@ function renderGeneralPaginationControls() {
     if (totalPages <= 1) return;
 
     for (let i = 1; i <= totalPages; i++) {
-        const pageButton = createElement('button', ['px-4', 'py-2', 'border', 'rounded-lg', 'transition-colors', 'text-sm']);
+        const pageButton = createElement('button', ['px-4', 'py-2', 'border', 'rounded-md', 'transition-colors', 'text-sm']);
         pageButton.textContent = i;
         if (i === generalListingsCurrentPage) {
-            pageButton.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+            pageButton.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
         } else {
-            pageButton.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+            pageButton.classList.add('bg-white', 'text-slate-700', 'hover:bg-slate-100', 'border-slate-300');
         }
         pageButton.onclick = () => {
             const currentHash = window.location.hash;
@@ -744,11 +744,11 @@ function renderGeneralPaginationControls() {
 function populateGrid(gridElement, listings, emptyMessage) {
     gridElement.innerHTML = '';
     if (listings.length === 0) {
-        gridElement.appendChild(createElement('p', ['col-span-full', 'text-center', 'text-gray-500', 'py-10'], emptyMessage));
+        gridElement.appendChild(createElement('p', ['col-span-full', 'text-center', 'text-slate-500', 'py-10'], emptyMessage));
         return;
     }
     listings.forEach(listing => {
-        const card = createElement('div', ['bg-white', 'rounded-xl', 'shadow-lg', 'overflow-hidden', 'transform', 'hover:-translate-y-1', 'transition-transform', 'duration-300', 'cursor-pointer', 'relative', 'flex', 'flex-col']);
+        const card = createElement('div', ['bg-white', 'rounded-xl', 'shadow-md', 'overflow-hidden', 'transform', 'hover:-translate-y-1', 'transition-all', 'duration-300', 'cursor-pointer', 'relative', 'flex', 'flex-col', 'border', 'border-slate-200', 'hover:shadow-lg']);
         const imageUrl = listing.imageUrls?.[0] || 'https://placehold.co/600x400/e2e8f0/64748b?text=ไม่มีรูปภาพ';
         const image = createElement('img', ['w-full', 'h-48', 'object-cover'], '', { src: imageUrl, alt: listing.title });
         image.onerror = () => { image.src = 'https://placehold.co/600x400/e2e8f0/64748b?text=รูปภาพเสียหาย'; };
@@ -758,18 +758,18 @@ function populateGrid(gridElement, listings, emptyMessage) {
             card.appendChild(badge);
         }
         const contentDiv = createElement('div', ['p-4', 'flex', 'flex-col', 'flex-grow']);
-        contentDiv.appendChild(createElement('h4', ['font-bold', 'text-lg', 'break-words'], listing.title));
-        const locationP = createElement('p', ['text-sm', 'text-gray-500', 'mb-2'], ` ${listing.district}, ${listing.province}`);
+        contentDiv.appendChild(createElement('h4', ['font-bold', 'text-lg', 'break-words', 'text-slate-800'], listing.title));
+        const locationP = createElement('p', ['text-sm', 'text-slate-500', 'mb-2'], ` ${listing.district}, ${listing.province}`);
         locationP.prepend(createElement('i', ['fas', 'fa-map-marker-alt', 'mr-1']));
         contentDiv.appendChild(locationP);
-        contentDiv.appendChild(createElement('p', ['text-blue-600', 'font-bold', 'text-xl', 'mb-3'], getPriceDisplay(listing.priceRent)));
-        const footerDiv = createElement('div', ['mt-auto', 'flex', 'justify-between', 'items-center', 'text-xs', 'text-gray-500', 'pt-2', 'border-t']);
+        contentDiv.appendChild(createElement('p', ['text-indigo-600', 'font-bold', 'text-xl', 'mb-3'], getPriceDisplay(listing.priceRent)));
+        const footerDiv = createElement('div', ['mt-auto', 'flex', 'justify-between', 'items-center', 'text-xs', 'text-slate-500', 'pt-2', 'border-t', 'border-slate-200']);
         footerDiv.appendChild(createElement('span', [], listing.type));
 
         const dateToFormat = listing.updatedAt || listing.createdAt;
         const dateSpan = createElement('span', ['font-semibold'], formatTimestamp(dateToFormat));
         if (listing.updatedAt && listing.createdAt && listing.updatedAt.seconds > listing.createdAt.seconds + 60) {
-            dateSpan.appendChild(createElement('span', ['text-amber-500', 'ml-1'], '(แก้ไขล่าสุด)'));
+            dateSpan.appendChild(createElement('span', ['text-amber-600', 'ml-1'], '(แก้ไขล่าสุด)'));
         }
         footerDiv.appendChild(dateSpan);
 
@@ -790,7 +790,7 @@ async function renderListingDetailPage(listingId) {
         const docRef = doc(db, "listings", listingId);
         const docSnap = await getDoc(docRef);
         if (!docSnap.exists()) {
-            listingDetailView.innerHTML = `<p class="text-center text-red-500">ไม่พบประกาศนี้</p>`;
+            listingDetailView.innerHTML = `<p class="text-center text-rose-600">ไม่พบประกาศนี้</p>`;
             return;
         }
         const listing = { id: docSnap.id, ...docSnap.data() };
@@ -800,12 +800,12 @@ async function renderListingDetailPage(listingId) {
         const imageCol = createElement('div');
         const detailsCol = createElement('div');
         const imageUrls = listing.imageUrls?.length > 0 ? listing.imageUrls : ['https://placehold.co/800x600/e2e8f0/64748b?text=ไม่มีรูปภาพ'];
-        const mainImage = createElement('img', ['w-full', 'h-96', 'object-cover', 'rounded-lg', 'shadow-md', 'mb-4', 'cursor-pointer'], '', { id: 'main-detail-image', src: imageUrls[0] });
+        const mainImage = createElement('img', ['w-full', 'h-96', 'object-cover', 'rounded-lg', 'shadow-md', 'mb-4', 'cursor-pointer', 'border', 'border-slate-200'], '', { id: 'main-detail-image', src: imageUrls[0] });
         mainImage.onclick = () => openLightbox(mainImage.src);
         mainImage.onerror = () => { mainImage.src = 'https://placehold.co/800x600/e2e8f0/64748b?text=รูปภาพเสียหาย'; };
         const thumbnailGrid = createElement('div', ['grid', 'grid-cols-4', 'gap-2']);
         imageUrls.forEach(url => {
-            const thumb = createElement('img', ['h-24', 'w-full', 'object-cover', 'rounded-md', 'cursor-pointer', 'border-2', 'border-transparent', 'hover:border-blue-500'], '', { src: url });
+            const thumb = createElement('img', ['h-24', 'w-full', 'object-cover', 'rounded-md', 'cursor-pointer', 'border-2', 'border-transparent', 'hover:border-indigo-500', 'transition-colors'], '', { src: url });
             thumb.onclick = () => mainImage.src = url;
             thumb.onerror = () => thumb.style.display = 'none';
             thumbnailGrid.appendChild(thumb);
@@ -813,62 +813,62 @@ async function renderListingDetailPage(listingId) {
         imageCol.append(mainImage, thumbnailGrid);
 
         const detailsHeader = createElement('div', ['flex', 'flex-col', 'sm:flex-row', 'sm:justify-between', 'sm:items-center', 'gap-2', 'mb-2']);
-        detailsHeader.appendChild(createElement('span', ['bg-blue-100', 'text-blue-800', 'text-xs', 'font-medium', 'px-2.5', 'py-0.5', 'rounded', 'self-start'], listing.type));
+        detailsHeader.appendChild(createElement('span', ['bg-indigo-100', 'text-indigo-800', 'text-xs', 'font-medium', 'px-2.5', 'py-0.5', 'rounded', 'self-start'], listing.type));
 
         const dateToFormat = listing.updatedAt || listing.createdAt;
-        const dateSpan = createElement('span', ['text-sm', 'text-gray-500', 'self-start', 'sm:self-center'], `อัปเดตเมื่อ ${formatTimestamp(dateToFormat)}`);
+        const dateSpan = createElement('span', ['text-sm', 'text-slate-500', 'self-start', 'sm:self-center'], `อัปเดตเมื่อ ${formatTimestamp(dateToFormat)}`);
         dateSpan.prepend(createElement('i', ['fas', 'fa-calendar-alt', 'mr-1']));
         detailsHeader.appendChild(dateSpan);
 
         detailsCol.appendChild(detailsHeader);
-        detailsCol.appendChild(createElement('h3', ['text-3xl', 'font-bold', 'mt-2', 'mb-2', 'break-words'], listing.title));
-        const locationP = createElement('p', ['text-lg', 'text-gray-600', 'mb-4'], `${listing.district}, ${listing.province}`);
+        detailsCol.appendChild(createElement('h3', ['text-3xl', 'font-bold', 'mt-2', 'mb-2', 'break-words', 'text-slate-800'], listing.title));
+        const locationP = createElement('p', ['text-lg', 'text-slate-600', 'mb-4'], `${listing.district}, ${listing.province}`);
         locationP.prepend(createElement('i', ['fas', 'fa-map-marker-alt', 'mr-2']));
         detailsCol.appendChild(locationP);
-        detailsCol.appendChild(createElement('p', ['text-3xl', 'font-bold', 'text-blue-600', 'mb-4'], getPriceDisplay(listing.priceRent)));
+        detailsCol.appendChild(createElement('p', ['text-3xl', 'font-bold', 'text-indigo-600', 'mb-4'], getPriceDisplay(listing.priceRent)));
         if (listing.priceInitial > 0) {
-            const initialPriceDiv = createElement('div', ['mt-4', 'p-3', 'bg-gray-50', 'rounded-lg']);
-            const initialPriceP = createElement('p', ['text-md', 'text-gray-800'], `ราคาเข้าอยู่ครั้งแรก: ${listing.priceInitial.toLocaleString()} บาท`);
-            initialPriceP.prepend(createElement('i', ['fas', 'fa-file-invoice-dollar', 'mr-2', 'text-green-500']), createElement('strong', [], ''));
+            const initialPriceDiv = createElement('div', ['mt-4', 'p-3', 'bg-slate-50', 'rounded-lg', 'border', 'border-slate-200']);
+            const initialPriceP = createElement('p', ['text-md', 'text-slate-800'], `ราคาเข้าอยู่ครั้งแรก: ${listing.priceInitial.toLocaleString()} บาท`);
+            initialPriceP.prepend(createElement('i', ['fas', 'fa-file-invoice-dollar', 'mr-2', 'text-emerald-500']), createElement('strong', [], ''));
             initialPriceDiv.appendChild(initialPriceP);
             detailsCol.appendChild(initialPriceDiv);
         }
         if (listing.availableDate) {
-            const availableDateDiv = createElement('div', ['mt-2', 'p-3', 'bg-gray-50', 'rounded-lg']);
-            const availableDateP = createElement('p', ['text-md', 'text-gray-800'], `วันที่เข้าอยู่ได้: ${new Date(listing.availableDate).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric', calendar: 'buddhist' })}`);
-            availableDateP.prepend(createElement('i', ['fas', 'fa-calendar-check', 'mr-2', 'text-blue-500']), createElement('strong', [], ''));
+            const availableDateDiv = createElement('div', ['mt-2', 'p-3', 'bg-slate-50', 'rounded-lg', 'border', 'border-slate-200']);
+            const availableDateP = createElement('p', ['text-md', 'text-slate-800'], `วันที่เข้าอยู่ได้: ${new Date(listing.availableDate).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric', calendar: 'buddhist' })}`);
+            availableDateP.prepend(createElement('i', ['fas', 'fa-calendar-check', 'mr-2', 'text-indigo-500']), createElement('strong', [], ''));
             availableDateDiv.appendChild(availableDateP);
             detailsCol.appendChild(availableDateDiv);
         }
-        detailsCol.appendChild(createElement('h5', ['font-bold', 'text-lg', 'mt-6', 'mb-2'], 'รายละเอียด'));
-        detailsCol.appendChild(createElement('p', ['text-gray-700', 'whitespace-pre-wrap', 'break-words', 'mb-6'], listing.description));
-        const contactBox = createElement('div', ['bg-gray-100', 'p-4', 'rounded-lg']);
-        contactBox.appendChild(createElement('h5', ['font-bold', 'text-lg', 'mb-2'], 'ข้อมูลติดต่อ'));
-        const ownerP = createElement('p', ['text-gray-800']);
-        ownerP.innerHTML = `<i class="fas fa-user mr-2"></i><a href="#" onclick="event.preventDefault(); navigateToProfile('${listing.ownerUid}')" class="text-blue-600 hover:underline">${listing.ownerUsername || listing.ownerEmail}</a>`;
+        detailsCol.appendChild(createElement('h5', ['font-bold', 'text-lg', 'mt-6', 'mb-2', 'text-slate-800'], 'รายละเอียด'));
+        detailsCol.appendChild(createElement('p', ['text-slate-700', 'whitespace-pre-wrap', 'break-words', 'mb-6'], listing.description));
+        const contactBox = createElement('div', ['bg-slate-100', 'p-4', 'rounded-lg', 'border', 'border-slate-200']);
+        contactBox.appendChild(createElement('h5', ['font-bold', 'text-lg', 'mb-2', 'text-slate-800'], 'ข้อมูลติดต่อ'));
+        const ownerP = createElement('p', ['text-slate-800']);
+        ownerP.innerHTML = `<i class="fas fa-user mr-2"></i><a href="#" onclick="event.preventDefault(); navigateToProfile('${listing.ownerUid}')" class="text-indigo-600 hover:underline">${listing.ownerUsername || listing.ownerEmail}</a>`;
         contactBox.appendChild(ownerP);
-        const phoneP = createElement('p', ['text-gray-800']);
-        phoneP.innerHTML = `<i class="fas fa-phone mr-2"></i><a href="tel:${listing.phone}" class="text-blue-600 hover:underline">${listing.phone || '-'}</a>`;
+        const phoneP = createElement('p', ['text-slate-800']);
+        phoneP.innerHTML = `<i class="fas fa-phone mr-2"></i><a href="tel:${listing.phone}" class="text-indigo-600 hover:underline">${listing.phone || '-'}</a>`;
         contactBox.appendChild(phoneP);
-        const lineP = createElement('p', ['text-gray-800']);
-        lineP.innerHTML = `<i class="fab fa-line mr-2"></i><a href="https://line.me/ti/p/~${listing.lineId}" target="_blank" rel="noopener noreferrer" class="text-green-500 hover:underline">${listing.lineId || '-'}</a>`;
+        const lineP = createElement('p', ['text-slate-800']);
+        lineP.innerHTML = `<i class="fab fa-line mr-2"></i><a href="https://line.me/ti/p/~${listing.lineId}" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:underline">${listing.lineId || '-'}</a>`;
         contactBox.appendChild(lineP);
         detailsCol.appendChild(contactBox);
 
         if (currentUser && (currentUser.uid === listing.ownerUid || currentUser.role === 'admin')) {
             const actionsDiv = createElement('div', ['mt-6', 'flex', 'flex-wrap', 'gap-4']);
 
-            const editBtn = createElement('button', ['flex-1', 'py-3', 'bg-amber-500', 'text-white', 'font-bold', 'rounded-lg', 'hover:bg-amber-600'], 'แก้ไข');
+            const editBtn = createElement('button', ['flex-1', 'py-3', 'bg-amber-500', 'text-white', 'font-bold', 'rounded-md', 'hover:bg-amber-600', 'transition-colors'], 'แก้ไข');
             editBtn.prepend(createElement('i', ['fas', 'fa-edit', 'mr-2']));
             editBtn.onclick = () => editListing(listing.id);
 
-            const deleteBtn = createElement('button', ['flex-1', 'py-3', 'bg-red-500', 'text-white', 'font-bold', 'rounded-lg', 'hover:bg-red-600'], 'ลบ');
+            const deleteBtn = createElement('button', ['flex-1', 'py-3', 'bg-rose-600', 'text-white', 'font-bold', 'rounded-md', 'hover:bg-rose-700', 'transition-colors'], 'ลบ');
             deleteBtn.prepend(createElement('i', ['fas', 'fa-trash', 'mr-2']));
             deleteBtn.onclick = () => deleteListing(listing.id);
 
             actionsDiv.append(editBtn, deleteBtn);
 
-            const boostBtn = createElement('button', ['w-full', 'py-3', 'text-white', 'font-bold', 'rounded-lg', 'mt-2']);
+            const boostBtn = createElement('button', ['w-full', 'py-3', 'text-white', 'font-bold', 'rounded-md', 'mt-2', 'transition-colors']);
 
             const now = new Date();
             const isBoostedAndActive = listing.isBoosted && (!listing.boostExpiryDate || listing.boostExpiryDate.toDate() > now);
@@ -879,7 +879,7 @@ async function renderListingDetailPage(listingId) {
                 boostBtn.disabled = true;
             } else if (isBoostedAndActive) {
                 boostBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>ดันโพสต์แล้ว';
-                boostBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                boostBtn.classList.add('bg-slate-400', 'cursor-not-allowed');
                 boostBtn.disabled = true;
             } else {
                 boostBtn.innerHTML = '<i class="fas fa-rocket mr-2"></i>ดันโพสต์';
@@ -893,7 +893,7 @@ async function renderListingDetailPage(listingId) {
         listingDetailView.appendChild(mainGrid);
     } catch (error) {
         console.error("Error rendering listing page:", error);
-        listingDetailView.innerHTML = `<p class="text-center text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูลประกาศ</p>`;
+        listingDetailView.innerHTML = `<p class="text-center text-rose-600">เกิดข้อผิดพลาดในการโหลดข้อมูลประกาศ</p>`;
     }
 }
 
@@ -938,7 +938,7 @@ async function deleteListing(id) {
             console.error("Error deleting document: ", error);
             showAlertModal('เกิดข้อผิดพลาดในการลบ');
         }
-    }, 'bg-red-500 hover:bg-red-600');
+    }, 'bg-rose-600 hover:bg-rose-700');
 }
 
 const boostPlans = [
@@ -960,11 +960,11 @@ function openBoostModal(listingId) {
     const plansContainer = document.getElementById('boost-plans-container');
     plansContainer.innerHTML = '';
     boostPlans.forEach(plan => {
-        const card = createElement('div', ['boost-plan-card', 'p-4', 'rounded-lg', 'cursor-pointer', 'text-center']);
+        const card = createElement('div', ['boost-plan-card', 'p-4', 'rounded-lg', 'cursor-pointer', 'text-center', 'bg-white']);
         card.dataset.planId = plan.id;
-        card.appendChild(createElement('h5', ['font-bold', 'text-xl'], plan.title));
-        card.appendChild(createElement('p', ['text-2xl', 'font-bold', 'my-2', 'text-blue-600'], `฿${plan.price}`));
-        card.appendChild(createElement('p', ['text-sm', 'text-gray-500'], plan.description));
+        card.appendChild(createElement('h5', ['font-bold', 'text-xl', 'text-slate-800'], plan.title));
+        card.appendChild(createElement('p', ['text-2xl', 'font-bold', 'my-2', 'text-indigo-600'], `฿${plan.price}`));
+        card.appendChild(createElement('p', ['text-sm', 'text-slate-500'], plan.description));
         card.onclick = () => {
             document.querySelectorAll('.boost-plan-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
@@ -1003,7 +1003,7 @@ document.getElementById('confirm-payment-button').addEventListener('click', asyn
 
 async function renderAdminView(activeTab = 'dashboard') {
     const adminMainContent = document.getElementById('admin-main-content');
-    adminMainContent.innerHTML = `<div class="text-center p-10"><i class="fas fa-spinner fa-spin text-3xl text-blue-500"></i></div>`;
+    adminMainContent.innerHTML = `<div class="text-center p-10"><i class="fas fa-spinner fa-spin text-3xl text-indigo-500"></i></div>`;
     document.querySelectorAll('.admin-sidebar-link').forEach(link => link.classList.remove('active'));
     document.getElementById(`admin-${activeTab}-link`).classList.add('active');
     if (activeTab === 'dashboard') { await renderAdminDashboard(); }
@@ -1026,33 +1026,33 @@ async function renderAdminDashboard() {
         adminMainContent.innerHTML = '';
         const dashboardGrid = createElement('div', ['grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'gap-6']);
         const createStatCard = (title, value, iconClass, colorClass) => {
-            const card = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'flex', 'items-center', 'gap-4']);
+            const card = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'flex', 'items-center', 'gap-4', 'border', 'border-slate-200']);
             const iconDiv = createElement('div', [`w-12`, `h-12`, 'rounded-full', 'flex', 'items-center', 'justify-center', colorClass]);
             iconDiv.innerHTML = `<i class="fas ${iconClass} text-white text-xl"></i>`;
             const textDiv = createElement('div');
-            textDiv.appendChild(createElement('p', ['text-3xl', 'font-bold'], value.toLocaleString()));
-            textDiv.appendChild(createElement('p', ['text-gray-500'], title));
+            textDiv.appendChild(createElement('p', ['text-3xl', 'font-bold', 'text-slate-800'], value.toLocaleString()));
+            textDiv.appendChild(createElement('p', ['text-slate-500'], title));
             card.append(iconDiv, textDiv);
             return card;
         }
-        dashboardGrid.appendChild(createStatCard('ประกาศทั้งหมด', totalListings, 'fa-list-alt', 'bg-blue-500'));
-        dashboardGrid.appendChild(createStatCard('ผู้ใช้ทั้งหมด', totalUsers, 'fa-users', 'bg-green-500'));
+        dashboardGrid.appendChild(createStatCard('ประกาศทั้งหมด', totalListings, 'fa-list-alt', 'bg-indigo-500'));
+        dashboardGrid.appendChild(createStatCard('ผู้ใช้ทั้งหมด', totalUsers, 'fa-users', 'bg-emerald-500'));
         dashboardGrid.appendChild(createStatCard('ประกาศแนะนำ', boostedListings, 'fa-rocket', 'bg-purple-500'));
         adminMainContent.appendChild(dashboardGrid);
     } catch (error) {
         console.error("Error loading admin dashboard:", error);
-        adminMainContent.innerHTML = `<div class="bg-white p-6 rounded-lg shadow-md text-red-500">เกิดข้อผิดพลาด: ${error.message}</div>`;
+        adminMainContent.innerHTML = `<div class="bg-white p-6 rounded-lg shadow-md text-rose-600 border border-rose-200">เกิดข้อผิดพลาด: ${error.message}</div>`;
     }
 }
 async function renderAdminListingsTable() {
     const adminMainContent = document.getElementById('admin-main-content');
     adminMainContent.innerHTML = '';
-    const container = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md']);
-    const searchInput = createElement('input', ['w-full', 'p-2', 'border', 'rounded-lg', 'mb-4'], '', { id: 'admin-listings-search', name: 'admin-listings-search', type: 'text', placeholder: 'ค้นหาประกาศด้วยชื่อ หรืออีเมลผู้ใช้...' });
+    const container = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'border', 'border-slate-200']);
+    const searchInput = createElement('input', ['w-full', 'p-2', 'border', 'border-slate-300', 'rounded-md', 'mb-4'], '', { id: 'admin-listings-search', name: 'admin-listings-search', type: 'text', placeholder: 'ค้นหาประกาศด้วยชื่อ หรืออีเมลผู้ใช้...' });
     const tableContainer = createElement('div', ['overflow-x-auto']);
     container.append(searchInput, tableContainer);
     adminMainContent.appendChild(container);
-    tableContainer.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin text-2xl text-blue-500"></i></div>`;
+    tableContainer.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin text-2xl text-indigo-500"></i></div>`;
     try {
         const querySnapshot = await getDocs(query(listingsCollection, orderBy("createdAt", "desc")));
         currentAdminListings = [];
@@ -1069,37 +1069,37 @@ async function renderAdminListingsTable() {
         populateAdminListingsTable(tableContainer, currentAdminListings);
     } catch (error) {
         console.error("Error fetching for admin panel:", error);
-        tableContainer.innerHTML = `<div class="text-center text-red-500 p-4">เกิดข้อผิดพลาด (อาจไม่มีสิทธิ์เข้าถึง)</div>`;
+        tableContainer.innerHTML = `<div class="text-center text-rose-600 p-4">เกิดข้อผิดพลาด (อาจไม่มีสิทธิ์เข้าถึง)</div>`;
     }
 }
 function populateAdminListingsTable(container, listings) {
     container.innerHTML = '';
-    if (listings.length === 0) { container.innerHTML = `<p class="text-center text-gray-500 p-4">ไม่พบประกาศ</p>`; return; }
-    const table = createElement('table', ['w-full', 'text-sm', 'text-left']);
-    table.innerHTML = `<thead class="bg-gray-50"><tr><th class="p-3">หัวข้อประกาศ</th><th class="p-3">ผู้ลงประกาศ</th><th class="p-3">ประเภท</th><th class="p-3">ราคา</th><th class="p-3">วันที่ลง</th><th class="p-3">จัดการ</th></tr></thead>`;
+    if (listings.length === 0) { container.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่พบประกาศ</p>`; return; }
+    const table = createElement('table', ['w-full', 'text-sm', 'text-left', 'text-slate-600']);
+    table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">หัวข้อประกาศ</th><th class="p-3">ผู้ลงประกาศ</th><th class="p-3">ประเภท</th><th class="p-3">ราคา</th><th class="p-3">วันที่ลง</th><th class="p-3">จัดการ</th></tr></thead>`;
     const tbody = createElement('tbody');
     listings.forEach(listing => {
-        const tr = createElement('tr', ['border-b']);
-        tr.appendChild(createElement('td', ['p-3', 'font-medium'], listing.title));
+        const tr = createElement('tr', ['border-b', 'border-slate-200']);
+        tr.appendChild(createElement('td', ['p-3', 'font-medium', 'text-slate-800'], listing.title));
         tr.appendChild(createElement('td', ['p-3'], listing.ownerUsername || listing.ownerEmail));
         tr.appendChild(createElement('td', ['p-3'], listing.type));
         tr.appendChild(createElement('td', ['p-3'], getPriceDisplay(listing.priceRent)));
         tr.appendChild(createElement('td', ['p-3'], formatTimestamp(listing.createdAt)));
         const actionsCell = createElement('td', ['p-3', 'flex', 'gap-3', 'items-center']);
-        const viewBtn = createElement('button', ['text-blue-500', 'hover:text-blue-700'], '', { title: 'ดูประกาศ' });
+        const viewBtn = createElement('button', ['text-indigo-600', 'hover:text-indigo-800'], '', { title: 'ดูประกาศ' });
         viewBtn.innerHTML = '<i class="fas fa-eye"></i>';
         viewBtn.onclick = () => navigateToListing(listing.id);
-        const editBtn = createElement('button', ['text-amber-500', 'hover:text-amber-700'], '', { title: 'แก้ไข' });
+        const editBtn = createElement('button', ['text-amber-600', 'hover:text-amber-800'], '', { title: 'แก้ไข' });
         editBtn.innerHTML = '<i class="fas fa-edit"></i>';
         editBtn.onclick = () => editListing(listing.id);
-        const deleteBtn = createElement('button', ['text-red-500', 'hover:text-red-700'], '', { title: 'ลบ' });
+        const deleteBtn = createElement('button', ['text-rose-600', 'hover:text-rose-800'], '', { title: 'ลบ' });
         deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
         deleteBtn.onclick = () => deleteListing(listing.id);
 
         const now = new Date();
         const isBoostedAndActive = listing.isBoosted && (!listing.boostExpiryDate || listing.boostExpiryDate.toDate() > now);
         if (isBoostedAndActive) {
-            const removeBoostBtn = createElement('button', ['text-purple-500', 'hover:text-purple-700'], '', { title: 'เอาโพสต์ลงจากการดัน' });
+            const removeBoostBtn = createElement('button', ['text-purple-600', 'hover:text-purple-800'], '', { title: 'เอาโพสต์ลงจากการดัน' });
             removeBoostBtn.innerHTML = '<i class="fas fa-arrow-down"></i>';
             removeBoostBtn.onclick = () => removeBoost(listing.id);
             actionsCell.appendChild(removeBoostBtn);
@@ -1115,12 +1115,12 @@ function populateAdminListingsTable(container, listings) {
 async function renderAdminUsersTable() {
     const adminMainContent = document.getElementById('admin-main-content');
     adminMainContent.innerHTML = '';
-    const container = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md']);
-    const searchInput = createElement('input', ['w-full', 'p-2', 'border', 'rounded-lg', 'mb-4'], '', { id: 'admin-users-search', name: 'admin-users-search', type: 'text', placeholder: 'ค้นหาผู้ใช้ด้วย Username หรืออีเมล...' });
+    const container = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'border', 'border-slate-200']);
+    const searchInput = createElement('input', ['w-full', 'p-2', 'border', 'border-slate-300', 'rounded-md', 'mb-4'], '', { id: 'admin-users-search', name: 'admin-users-search', type: 'text', placeholder: 'ค้นหาผู้ใช้ด้วย Username หรืออีเมล...' });
     const tableContainer = createElement('div', ['overflow-x-auto']);
     container.append(searchInput, tableContainer);
     adminMainContent.appendChild(container);
-    tableContainer.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin text-2xl text-blue-500"></i></div>`;
+    tableContainer.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin text-2xl text-indigo-500"></i></div>`;
     try {
         const querySnapshot = await getDocs(query(usersCollection, orderBy("createdAt", "desc")));
         currentAdminUsers = [];
@@ -1133,22 +1133,22 @@ async function renderAdminUsersTable() {
         populateAdminUsersTable(tableContainer, currentAdminUsers);
     } catch (error) {
         console.error("Error fetching users for admin panel:", error);
-        tableContainer.innerHTML = `<div class="text-center text-red-500 p-4">เกิดข้อผิดพลาด (อาจไม่มีสิทธิ์เข้าถึง)</div>`;
+        tableContainer.innerHTML = `<div class="text-center text-rose-600 p-4">เกิดข้อผิดพลาด (อาจไม่มีสิทธิ์เข้าถึง)</div>`;
     }
 }
 function populateAdminUsersTable(container, users) {
     container.innerHTML = '';
-    if (users.length === 0) { container.innerHTML = `<p class="text-center text-gray-500 p-4">ไม่พบผู้ใช้</p>`; return; }
-    const table = createElement('table', ['w-full', 'text-sm', 'text-left']);
-    table.innerHTML = `<thead class="bg-gray-50"><tr><th class="p-3">Username</th><th class="p-3">อีเมล</th><th class="p-3">วันที่สมัคร</th><th class="p-3">จัดการ</th></tr></thead>`;
+    if (users.length === 0) { container.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่พบผู้ใช้</p>`; return; }
+    const table = createElement('table', ['w-full', 'text-sm', 'text-left', 'text-slate-600']);
+    table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">Username</th><th class="p-3">อีเมล</th><th class="p-3">วันที่สมัคร</th><th class="p-3">จัดการ</th></tr></thead>`;
     const tbody = createElement('tbody');
     users.forEach(user => {
-        const tr = createElement('tr', ['border-b']);
-        tr.appendChild(createElement('td', ['p-3', 'font-medium'], user.username));
+        const tr = createElement('tr', ['border-b', 'border-slate-200']);
+        tr.appendChild(createElement('td', ['p-3', 'font-medium', 'text-slate-800'], user.username));
         tr.appendChild(createElement('td', ['p-3'], user.email));
         tr.appendChild(createElement('td', ['p-3'], formatTimestamp(user.createdAt, true)));
         const actionsCell = createElement('td', ['p-3']);
-        const viewProfileBtn = createElement('button', ['text-blue-500', 'hover:text-blue-700'], ' ดูโปรไฟล์', { title: 'ดูโปรไฟล์' });
+        const viewProfileBtn = createElement('button', ['text-indigo-600', 'hover:text-indigo-800'], ' ดูโปรไฟล์', { title: 'ดูโปรไฟล์' });
         viewProfileBtn.prepend(createElement('i', ['fas', 'fa-user-circle', 'mr-1']));
         viewProfileBtn.onclick = () => navigateToProfile(user.id);
         actionsCell.append(viewProfileBtn);
@@ -1161,12 +1161,12 @@ function populateAdminUsersTable(container, users) {
 async function renderAdminBoostsTable() {
     const adminMainContent = document.getElementById('admin-main-content');
     adminMainContent.innerHTML = '';
-    const container = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md']);
-    container.appendChild(createElement('h4', ['text-xl', 'font-bold', 'mb-4'], 'คำขอดันประกาศที่รอการอนุมัติ'));
+    const container = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'border', 'border-slate-200']);
+    container.appendChild(createElement('h4', ['text-xl', 'font-bold', 'mb-4', 'text-slate-800'], 'คำขอดันประกาศที่รอการอนุมัติ'));
     const tableContainer = createElement('div', ['overflow-x-auto']);
     container.appendChild(tableContainer);
     adminMainContent.appendChild(container);
-    tableContainer.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin text-2xl text-blue-500"></i></div>`;
+    tableContainer.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin text-2xl text-indigo-500"></i></div>`;
     try {
         const q = query(listingsCollection, where("boostStatus", "==", "pending"));
         const querySnapshot = await getDocs(q);
@@ -1176,27 +1176,27 @@ async function renderAdminBoostsTable() {
         populateAdminBoostsTable(tableContainer, pendingBoosts);
     } catch (error) {
         console.error("Error fetching pending boosts:", error);
-        tableContainer.innerHTML = `<div class="text-center text-red-500 p-4">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
+        tableContainer.innerHTML = `<div class="text-center text-rose-600 p-4">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
     }
 }
 function populateAdminBoostsTable(container, listings) {
     container.innerHTML = '';
-    if (listings.length === 0) { container.innerHTML = `<p class="text-center text-gray-500 p-4">ไม่มีคำขอที่รอการอนุมัติ</p>`; return; }
-    const table = createElement('table', ['w-full', 'text-sm', 'text-left']);
-    table.innerHTML = `<thead class="bg-gray-50"><tr><th class="p-3">รหัสประกาศ</th><th class="p-3">หัวข้อ</th><th class="p-3">แพ็กเกจที่ขอ</th><th class="p-3">ราคา</th><th class="p-3">วันที่ขอ</th><th class="p-3">จัดการ</th></tr></thead>`;
+    if (listings.length === 0) { container.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่มีคำขอที่รอการอนุมัติ</p>`; return; }
+    const table = createElement('table', ['w-full', 'text-sm', 'text-left', 'text-slate-600']);
+    table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">รหัสประกาศ</th><th class="p-3">หัวข้อ</th><th class="p-3">แพ็กเกจที่ขอ</th><th class="p-3">ราคา</th><th class="p-3">วันที่ขอ</th><th class="p-3">จัดการ</th></tr></thead>`;
     const tbody = createElement('tbody');
     listings.forEach(listing => {
         const plan = boostPlans.find(p => p.id === listing.boostTier);
-        const tr = createElement('tr', ['border-b']);
+        const tr = createElement('tr', ['border-b', 'border-slate-200']);
         tr.appendChild(createElement('td', ['p-3', 'font-mono', 'text-xs'], listing.id));
-        tr.appendChild(createElement('td', ['p-3', 'font-medium'], listing.title));
+        tr.appendChild(createElement('td', ['p-3', 'font-medium', 'text-slate-800'], listing.title));
         tr.appendChild(createElement('td', ['p-3'], plan ? plan.title : 'N/A'));
         tr.appendChild(createElement('td', ['p-3'], `฿${listing.boostPrice || 'N/A'}`));
         tr.appendChild(createElement('td', ['p-3'], formatTimestamp(listing.boostRequestedAt)));
         const actionsCell = createElement('td', ['p-3', 'flex', 'gap-2']);
-        const approveBtn = createElement('button', ['px-3', 'py-1', 'bg-green-500', 'text-white', 'rounded', 'hover:bg-green-600', 'text-xs'], 'อนุมัติ');
+        const approveBtn = createElement('button', ['px-3', 'py-1', 'bg-emerald-600', 'text-white', 'rounded-md', 'hover:bg-emerald-700', 'text-xs', 'transition-colors'], 'อนุมัติ');
         approveBtn.onclick = () => openAdminApproveModal(listing.id, listing.title, listing.boostTier);
-        const rejectBtn = createElement('button', ['px-3', 'py-1', 'bg-red-500', 'text-white', 'rounded', 'hover:bg-red-600', 'text-xs'], 'ไม่อนุมัติ');
+        const rejectBtn = createElement('button', ['px-3', 'py-1', 'bg-rose-600', 'text-white', 'rounded-md', 'hover:bg-rose-700', 'text-xs', 'transition-colors'], 'ไม่อนุมัติ');
         rejectBtn.onclick = () => rejectBoost(listing.id, listing.ownerUid);
         actionsCell.append(approveBtn, rejectBtn);
         tr.appendChild(actionsCell);
@@ -1221,7 +1221,7 @@ async function rejectBoost(listingId, ownerUid) {
             console.error("Error rejecting boost:", error);
             showAlertModal("เกิดข้อผิดพลาดในการปฏิเสธคำขอ");
         }
-    }, 'bg-red-500 hover:bg-red-600');
+    }, 'bg-rose-600 hover:bg-rose-700');
 }
 function openAdminApproveModal(listingId, listingTitle, requestedTierId) {
     document.getElementById('admin-boost-listing-id').textContent = listingId;
@@ -1230,11 +1230,11 @@ function openAdminApproveModal(listingId, listingTitle, requestedTierId) {
     plansContainer.innerHTML = '';
     boostPlans.forEach((plan, index) => {
         const div = createElement('div', ['flex', 'items-center']);
-        const input = createElement('input', ['mr-2'], '', { type: 'radio', id: `admin_${plan.id}`, name: 'boost_plan', value: plan.days });
+        const input = createElement('input', ['mr-2', 'h-4', 'w-4', 'text-indigo-600', 'border-slate-300', 'focus:ring-indigo-500'], '', { type: 'radio', id: `admin_${plan.id}`, name: 'boost_plan', value: plan.days });
         if (plan.id === requestedTierId) {
             input.checked = true;
         }
-        const label = createElement('label', [], `${plan.title} (${plan.price} บาท)`, { for: `admin_${plan.id}` });
+        const label = createElement('label', ['text-slate-700'], `${plan.title} (${plan.price} บาท)`, { for: `admin_${plan.id}` });
         div.append(input, label);
         plansContainer.appendChild(div);
     });
@@ -1268,7 +1268,7 @@ async function approveBoost(listingId, days) {
             console.error("Error approving boost:", error);
             showAlertModal("เกิดข้อผิดพลาดในการอนุมัติ");
         }
-    }, 'bg-green-500 hover:bg-green-600');
+    }, 'bg-emerald-600 hover:bg-emerald-700');
 }
 async function removeBoost(listingId) {
     openConfirmModal(`คุณแน่ใจหรือไม่ว่าต้องการเอาโพสต์ "${listingId}" ลงจากการดัน?`, async () => {
@@ -1284,17 +1284,17 @@ async function removeBoost(listingId) {
             console.error("Error removing boost:", error);
             showAlertModal("เกิดข้อผิดพลาด");
         }
-    }, 'bg-red-500 hover:bg-red-600');
+    }, 'bg-rose-600 hover:bg-rose-700');
 }
 async function renderAdminBoostedTable() {
     const adminMainContent = document.getElementById('admin-main-content');
     adminMainContent.innerHTML = '';
-    const container = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md']);
-    container.appendChild(createElement('h4', ['text-xl', 'font-bold', 'mb-4'], 'ประกาศทั้งหมดที่กำลังดันอยู่'));
+    const container = createElement('div', ['bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'border', 'border-slate-200']);
+    container.appendChild(createElement('h4', ['text-xl', 'font-bold', 'mb-4', 'text-slate-800'], 'ประกาศทั้งหมดที่กำลังดันอยู่'));
     const tableContainer = createElement('div', ['overflow-x-auto']);
     container.appendChild(tableContainer);
     adminMainContent.appendChild(container);
-    tableContainer.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin text-2xl text-blue-500"></i></div>`;
+    tableContainer.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin text-2xl text-indigo-500"></i></div>`;
     try {
         const q = query(listingsCollection, where("isBoosted", "==", true));
         const querySnapshot = await getDocs(q);
@@ -1310,23 +1310,23 @@ async function renderAdminBoostedTable() {
         populateAdminBoostedTable(tableContainer, boostedListings);
     } catch (error) {
         console.error("Error fetching boosted listings:", error);
-        tableContainer.innerHTML = `<div class="text-center text-red-500 p-4">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
+        tableContainer.innerHTML = `<div class="text-center text-rose-600 p-4">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
     }
 }
 function populateAdminBoostedTable(container, listings) {
     container.innerHTML = '';
-    if (listings.length === 0) { container.innerHTML = `<p class="text-center text-gray-500 p-4">ไม่มีประกาศที่กำลังดันอยู่</p>`; return; }
-    const table = createElement('table', ['w-full', 'text-sm', 'text-left']);
-    table.innerHTML = `<thead class="bg-gray-50"><tr><th class="p-3">หัวข้อ</th><th class="p-3">ผู้ลงประกาศ</th><th class="p-3">เวลาที่เหลือ</th><th class="p-3">วันหมดอายุ</th><th class="p-3">จัดการ</th></tr></thead>`;
+    if (listings.length === 0) { container.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่มีประกาศที่กำลังดันอยู่</p>`; return; }
+    const table = createElement('table', ['w-full', 'text-sm', 'text-left', 'text-slate-600']);
+    table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">หัวข้อ</th><th class="p-3">ผู้ลงประกาศ</th><th class="p-3">เวลาที่เหลือ</th><th class="p-3">วันหมดอายุ</th><th class="p-3">จัดการ</th></tr></thead>`;
     const tbody = createElement('tbody');
     listings.forEach(listing => {
-        const tr = createElement('tr', ['border-b']);
-        tr.appendChild(createElement('td', ['p-3', 'font-medium'], listing.title));
+        const tr = createElement('tr', ['border-b', 'border-slate-200']);
+        tr.appendChild(createElement('td', ['p-3', 'font-medium', 'text-slate-800'], listing.title));
         tr.appendChild(createElement('td', ['p-3'], listing.ownerUsername));
-        tr.appendChild(createElement('td', ['p-3', 'font-semibold'], formatTimeRemaining(listing.boostExpiryDate)));
+        tr.appendChild(createElement('td', ['p-3', 'font-semibold', 'text-emerald-600'], formatTimeRemaining(listing.boostExpiryDate)));
         tr.appendChild(createElement('td', ['p-3'], formatTimestamp(listing.boostExpiryDate, true)));
         const actionsCell = createElement('td', ['p-3']);
-        const removeBtn = createElement('button', ['px-3', 'py-1', 'bg-red-500', 'text-white', 'rounded', 'hover:bg-red-600', 'text-xs'], 'เอาลง');
+        const removeBtn = createElement('button', ['px-3', 'py-1', 'bg-rose-600', 'text-white', 'rounded-md', 'hover:bg-rose-700', 'text-xs', 'transition-colors'], 'เอาลง');
         removeBtn.onclick = () => removeBoost(listing.id);
         actionsCell.appendChild(removeBtn);
         tr.appendChild(actionsCell);
@@ -1340,12 +1340,12 @@ function renderProfilePagination(container, totalPages, userId) {
     container.innerHTML = '';
     if (totalPages <= 1) return;
     for (let i = 1; i <= totalPages; i++) {
-        const pageButton = createElement('button', ['px-4', 'py-2', 'border', 'rounded-lg', 'transition-colors', 'text-sm']);
+        const pageButton = createElement('button', ['px-4', 'py-2', 'border', 'rounded-md', 'transition-colors', 'text-sm']);
         pageButton.textContent = i;
         if (i === profileCurrentPage) {
-            pageButton.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+            pageButton.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
         } else {
-            pageButton.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+            pageButton.classList.add('bg-white', 'text-slate-700', 'hover:bg-slate-100', 'border-slate-300');
         }
         pageButton.onclick = () => {
             window.location.hash = `#profile/${userId}?page=${i}`;
@@ -1358,7 +1358,7 @@ async function renderProfilePage(userId) {
     try {
         const userDocRef = doc(db, "users", userId);
         const userDocSnap = await getDoc(userDocRef);
-        if (!userDocSnap.exists()) { profileView.innerHTML = `<p class="text-center text-red-500">ไม่พบข้อมูลผู้ใช้ หรือคุณไม่มีสิทธิ์เข้าถึง</p>`; return; }
+        if (!userDocSnap.exists()) { profileView.innerHTML = `<p class="text-center text-rose-600">ไม่พบข้อมูลผู้ใช้ หรือคุณไม่มีสิทธิ์เข้าถึง</p>`; return; }
         const userData = userDocSnap.data();
         const listingsQuery = query(listingsCollection, where("ownerUid", "==", userId), orderBy("createdAt", "desc"));
         const listingsSnapshot = await getDocs(listingsQuery);
@@ -1371,10 +1371,10 @@ async function renderProfilePage(userId) {
         const pageListings = userListings.slice(start, end);
         profileView.innerHTML = '';
         const mainGrid = createElement('div', ['grid', 'grid-cols-1', 'lg:grid-cols-4', 'gap-8']);
-        const profileCol = createElement('div', ['lg:col-span-1', 'bg-white', 'p-6', 'rounded-xl', 'shadow-md', 'text-center', 'h-fit']);
+        const profileCol = createElement('div', ['lg:col-span-1', 'bg-white', 'p-6', 'rounded-xl', 'shadow-md', 'text-center', 'h-fit', 'border', 'border-slate-200']);
         const listingsCol = createElement('div', ['lg:col-span-3']);
         const profilePicContainer = createElement('div', ['relative', 'w-32', 'h-32', 'mx-auto']);
-        const profilePicDisplay = createElement('div', ['w-32', 'h-32', 'bg-blue-500', 'rounded-full', 'flex', 'items-center', 'justify-center', 'text-white', 'text-5xl', 'font-bold', 'mx-auto', 'overflow-hidden']);
+        const profilePicDisplay = createElement('div', ['w-32', 'h-32', 'bg-indigo-500', 'rounded-full', 'flex', 'items-center', 'justify-center', 'text-white', 'text-5xl', 'font-bold', 'mx-auto', 'overflow-hidden', 'border-4', 'border-white', 'shadow-md']);
         if (userData.photoURL) {
             profilePicDisplay.appendChild(createElement('img', ['w-full', 'h-full', 'object-cover'], '', { src: userData.photoURL }));
         } else {
@@ -1382,41 +1382,41 @@ async function renderProfilePage(userId) {
         }
         profilePicContainer.appendChild(profilePicDisplay);
         if (currentUser && currentUser.uid === userId) {
-            profilePicDisplay.classList.add('cursor-pointer', 'hover:opacity-80');
+            profilePicDisplay.classList.add('cursor-pointer', 'hover:opacity-80', 'transition-opacity');
             profilePicDisplay.onclick = () => openProfilePictureModal();
-            const cameraIcon = createElement('div', ['absolute', 'bottom-0', 'right-0', 'bg-white', 'rounded-full', 'p-2', 'shadow-md']);
-            cameraIcon.innerHTML = `<i class="fas fa-camera text-gray-600"></i>`;
+            const cameraIcon = createElement('div', ['absolute', 'bottom-0', 'right-0', 'bg-white', 'rounded-full', 'p-2', 'shadow-md', 'w-9', 'h-9', 'flex', 'items-center', 'justify-center']);
+            cameraIcon.innerHTML = `<i class="fas fa-camera text-slate-600"></i>`;
             profilePicContainer.appendChild(cameraIcon);
         }
         profileCol.appendChild(profilePicContainer);
-        profileCol.appendChild(createElement('h3', ['text-3xl', 'font-bold', 'mt-4'], userData.username));
-        profileCol.appendChild(createElement('p', ['text-gray-500', 'mt-1'], userData.email));
+        profileCol.appendChild(createElement('h3', ['text-3xl', 'font-bold', 'mt-4', 'text-slate-800'], userData.username));
+        profileCol.appendChild(createElement('p', ['text-slate-500', 'mt-1'], userData.email));
         const joinedDate = userData.createdAt ? formatTimestamp(userData.createdAt, true) : 'ไม่ระบุ';
-        const joinedP = createElement('p', ['text-sm', 'text-gray-400', 'mt-4'], `เข้าร่วมเมื่อ ${joinedDate}`);
+        const joinedP = createElement('p', ['text-sm', 'text-slate-400', 'mt-4'], `เข้าร่วมเมื่อ ${joinedDate}`);
         joinedP.prepend(createElement('i', ['fas', 'fa-calendar-alt', 'mr-2']));
         profileCol.appendChild(joinedP);
-        const contactDiv = createElement('div', ['text-left', 'mt-6', 'pt-4', 'border-t']);
-        contactDiv.appendChild(createElement('h4', ['font-semibold', 'mb-2'], 'ข้อมูลติดต่อสาธารณะ'));
-        const phoneP = createElement('p', ['text-gray-800', 'text-sm', 'mb-1'], `${userData.phone || 'ยังไม่ได้ระบุ'}`);
-        phoneP.prepend(createElement('i', ['fas', 'fa-phone', 'mr-2', 'w-4', 'text-center']));
+        const contactDiv = createElement('div', ['text-left', 'mt-6', 'pt-4', 'border-t', 'border-slate-200']);
+        contactDiv.appendChild(createElement('h4', ['font-semibold', 'mb-2', 'text-slate-700'], 'ข้อมูลติดต่อสาธารณะ'));
+        const phoneP = createElement('p', ['text-slate-800', 'text-sm', 'mb-1'], `${userData.phone || 'ยังไม่ได้ระบุ'}`);
+        phoneP.prepend(createElement('i', ['fas', 'fa-phone', 'mr-2', 'w-4', 'text-center', 'text-slate-400']));
         contactDiv.appendChild(phoneP);
-        const lineP = createElement('p', ['text-gray-800', 'text-sm'], `${userData.lineId || 'ยังไม่ได้ระบุ'}`);
-        lineP.prepend(createElement('i', ['fab', 'fa-line', 'mr-2', 'w-4', 'text-center']));
+        const lineP = createElement('p', ['text-slate-800', 'text-sm'], `${userData.lineId || 'ยังไม่ได้ระบุ'}`);
+        lineP.prepend(createElement('i', ['fab', 'fa-line', 'mr-2', 'w-4', 'text-center', 'text-slate-400']));
         contactDiv.appendChild(lineP);
         profileCol.appendChild(contactDiv);
         if (currentUser && currentUser.uid === userId) {
-            const editBtn = createElement('button', ['mt-4', 'w-full', 'py-2', 'bg-amber-500', 'text-white', 'font-bold', 'rounded-lg', 'hover:bg-amber-600'], 'แก้ไขโปรไฟล์');
+            const editBtn = createElement('button', ['mt-4', 'w-full', 'py-2', 'bg-amber-500', 'text-white', 'font-bold', 'rounded-md', 'hover:bg-amber-600', 'transition-colors'], 'แก้ไขโปรไฟล์');
             editBtn.onclick = openEditProfileModal;
             profileCol.appendChild(editBtn);
         }
-        listingsCol.appendChild(createElement('h4', ['text-2xl', 'font-bold', 'mb-4'], `ประกาศทั้งหมด (${totalListings})`));
+        listingsCol.appendChild(createElement('h4', ['text-2xl', 'font-bold', 'mb-4', 'text-slate-800'], `ประกาศทั้งหมด (${totalListings})`));
         const listingsContainer = createElement('div', ['grid', 'grid-cols-1', 'md:grid-cols-2', 'gap-6']);
         const paginationContainer = createElement('div', ['md:col-span-2', 'flex', 'justify-center', 'items-center', 'mt-8', 'gap-2']);
         if (pageListings.length === 0) {
-            listingsContainer.innerHTML = '<div class="md:col-span-2 text-center text-gray-500 mt-6 p-8 border rounded-lg bg-white shadow-md">ผู้ใช้ยังไม่มีประกาศ</div>';
+            listingsContainer.innerHTML = '<div class="md:col-span-2 text-center text-slate-500 mt-6 p-8 border border-dashed border-slate-300 rounded-lg bg-white">ผู้ใช้ยังไม่มีประกาศ</div>';
         } else {
             pageListings.forEach(listing => {
-                const listingCard = createElement('div', ['bg-white', 'rounded-xl', 'shadow-md', 'hover:shadow-lg', 'transition-shadow', 'border', 'flex', 'flex-col']);
+                const listingCard = createElement('div', ['bg-white', 'rounded-xl', 'shadow-md', 'hover:shadow-lg', 'transition-shadow', 'border', 'border-slate-200', 'flex', 'flex-col']);
                 const cardContent = createElement('div', ['p-4', 'flex-grow', 'flex', 'flex-col']);
                 const imageLink = createElement('a', [], '', { href: `#listing/${listing.id}` });
                 const imageUrl = listing.imageUrls?.[0] || 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป';
@@ -1424,18 +1424,18 @@ async function renderProfilePage(userId) {
                 image.onerror = () => { image.src = 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป'; };
                 imageLink.appendChild(image);
                 const textLink = createElement('a', ['flex-1', 'mt-4', 'flex', 'flex-col'], '', { href: `#listing/${listing.id}` });
-                textLink.appendChild(createElement('h5', ['font-bold', 'text-lg', 'flex-grow'], listing.title));
-                textLink.appendChild(createElement('p', ['text-sm', 'text-gray-500'], `${listing.district}, ${listing.province}`));
+                textLink.appendChild(createElement('h5', ['font-bold', 'text-lg', 'flex-grow', 'text-slate-800'], listing.title));
+                textLink.appendChild(createElement('p', ['text-sm', 'text-slate-500'], `${listing.district}, ${listing.province}`));
                 const footerDiv = createElement('div', ['flex', 'justify-between', 'items-center', 'mt-2']);
-                footerDiv.appendChild(createElement('p', ['text-md', 'font-semibold', 'text-blue-600'], getPriceDisplay(listing.priceRent)));
-                const dateP = createElement('p', ['text-xs', 'text-gray-500'], formatTimestamp(listing.createdAt));
+                footerDiv.appendChild(createElement('p', ['text-md', 'font-semibold', 'text-indigo-600'], getPriceDisplay(listing.priceRent)));
+                const dateP = createElement('p', ['text-xs', 'text-slate-500'], formatTimestamp(listing.createdAt));
                 if (listing.updatedAt && listing.createdAt && listing.updatedAt.seconds > listing.createdAt.seconds + 10) {
-                    dateP.innerHTML += ` <span class="text-amber-500">(แก้ไข)</span>`;
+                    dateP.innerHTML += ` <span class="text-amber-600">(แก้ไข)</span>`;
                 }
                 footerDiv.appendChild(dateP);
                 textLink.appendChild(footerDiv);
                 cardContent.append(imageLink, textLink);
-                const boostSection = createElement('div', ['p-4', 'mt-auto', 'pt-3', 'border-t', 'flex', 'items-center', 'justify-between']);
+                const boostSection = createElement('div', ['p-4', 'mt-auto', 'pt-3', 'border-t', 'border-slate-200', 'flex', 'items-center', 'justify-between', 'bg-slate-50', 'rounded-b-xl']);
                 const now = new Date();
                 const isBoostedAndActive = listing.isBoosted && listing.boostExpiryDate && listing.boostExpiryDate.toDate() > now;
                 if (listing.boostStatus === 'pending') {
@@ -1443,25 +1443,25 @@ async function renderProfilePage(userId) {
                     status.prepend(createElement('i', ['fas', 'fa-clock', 'mr-2']));
                     boostSection.appendChild(status);
                 } else if (isBoostedAndActive) {
-                    const timer = createElement('p', ['text-sm', 'font-semibold', 'text-green-600'], formatTimeRemaining(listing.boostExpiryDate));
+                    const timer = createElement('p', ['text-sm', 'font-semibold', 'text-emerald-600'], formatTimeRemaining(listing.boostExpiryDate));
                     timer.prepend(createElement('i', ['fas', 'fa-check-circle', 'mr-2']));
                     boostSection.appendChild(timer);
                     if (currentUser && currentUser.role === 'admin') {
-                        const removeBtn = createElement('button', ['text-xs', 'text-red-500', 'hover:underline'], 'เอาลง');
+                        const removeBtn = createElement('button', ['text-xs', 'text-rose-600', 'hover:underline'], 'เอาลง');
                         removeBtn.onclick = (e) => { e.stopPropagation(); removeBoost(listing.id); };
                         boostSection.appendChild(removeBtn);
                     }
                 } else if (listing.boostStatus === 'rejected') {
-                    const status = createElement('p', ['text-sm', 'font-semibold', 'text-red-600'], 'ไม่สำเร็จ');
+                    const status = createElement('p', ['text-sm', 'font-semibold', 'text-rose-600'], 'ไม่สำเร็จ');
                     status.prepend(createElement('i', ['fas', 'fa-times-circle', 'mr-2']));
                     boostSection.appendChild(status);
-                    const boostBtn = createElement('button', ['py-1', 'px-3', 'bg-purple-600', 'text-white', 'font-bold', 'rounded-lg', 'hover:bg-purple-700', 'text-xs']);
+                    const boostBtn = createElement('button', ['py-1', 'px-3', 'bg-purple-600', 'text-white', 'font-bold', 'rounded-md', 'hover:bg-purple-700', 'text-xs', 'transition-colors']);
                     boostBtn.innerHTML = '<i class="fas fa-rocket mr-1"></i>ลองใหม่';
                     boostBtn.onclick = (e) => { e.stopPropagation(); openBoostModal(listing.id); };
                     boostSection.appendChild(boostBtn);
                 }
                 else {
-                    const boostBtn = createElement('button', ['w-full', 'py-2', 'bg-purple-600', 'text-white', 'font-bold', 'rounded-lg', 'hover:bg-purple-700', 'text-sm']);
+                    const boostBtn = createElement('button', ['w-full', 'py-2', 'bg-purple-600', 'text-white', 'font-bold', 'rounded-md', 'hover:bg-purple-700', 'text-sm', 'transition-colors']);
                     boostBtn.innerHTML = '<i class="fas fa-rocket mr-2"></i>ดันโพสต์';
                     boostBtn.onclick = (e) => { e.stopPropagation(); openBoostModal(listing.id); };
                     boostSection.appendChild(boostBtn);
@@ -1476,7 +1476,7 @@ async function renderProfilePage(userId) {
         profileView.appendChild(mainGrid);
     } catch (error) {
         console.error("Error showing user profile:", error);
-        profileView.innerHTML = `<p class="text-center text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูลโปรไฟล์ หรือคุณไม่มีสิทธิ์เข้าถึง</p>`;
+        profileView.innerHTML = `<p class="text-center text-rose-600">เกิดข้อผิดพลาดในการโหลดข้อมูลโปรไฟล์ หรือคุณไม่มีสิทธิ์เข้าถึง</p>`;
     }
 }
 
@@ -1617,10 +1617,10 @@ function showAlertModal(message, title = 'แจ้งเตือน') {
     document.getElementById('alert-modal-text').textContent = message;
     openModal('alertModal');
 };
-function openConfirmModal(message, onConfirm, confirmButtonClass = 'bg-red-500 hover:bg-red-600') {
+function openConfirmModal(message, onConfirm, confirmButtonClass = 'bg-rose-600 hover:bg-rose-700') {
     document.getElementById('confirm-modal-text').textContent = message;
     const confirmBtn = document.getElementById('confirm-modal-confirm-btn');
-    confirmBtn.className = `px-6 py-2 text-white font-bold rounded-lg ${confirmButtonClass}`;
+    confirmBtn.className = `px-6 py-2 text-white font-bold rounded-md transition-colors ${confirmButtonClass}`;
     confirmCallback = onConfirm;
     openModal('confirmModal');
 };
@@ -1681,7 +1681,7 @@ function openProfilePictureModal() {
         document.getElementById('view-profile-pic-btn').style.display = 'flex';
         document.getElementById('remove-profile-pic-btn').style.display = 'flex';
     } else {
-        previewContainer.appendChild(createElement('span', ['text-6xl', 'font-bold', 'text-gray-500'], currentUser.username.charAt(0).toUpperCase()));
+        previewContainer.appendChild(createElement('span', ['text-6xl', 'font-bold', 'text-slate-500'], currentUser.username.charAt(0).toUpperCase()));
         document.getElementById('view-profile-pic-btn').style.display = 'none';
         document.getElementById('remove-profile-pic-btn').style.display = 'none';
     }
@@ -1768,7 +1768,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.error("Error removing profile picture:", error);
                 showAlertModal('เกิดข้อผิดพลาดในการลบรูปภาพ');
             }
-        }, 'bg-red-500 hover:bg-red-600');
+        }, 'bg-rose-600 hover:bg-rose-700');
     });
 
     if (slides.length > 0) {

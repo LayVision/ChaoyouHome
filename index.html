@@ -18,68 +18,66 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="text-gray-800">
+<body class="text-slate-800">
 
     <div id="app" class="container mx-auto p-4 md:p-6">
 
-        <header class="relative flex justify-between items-center mb-6 pb-4 border-b">
-            <h1 id="header-title" class="text-2xl md:text-3xl font-bold cursor-pointer">
-                <i class="fas fa-home mr-2 text-blue-600"></i>
-                <span class="bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text">
-                    ChaoYouHome
-                </span>
+        <header class="relative flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+            <h1 id="header-title" class="text-2xl md:text-3xl font-bold cursor-pointer text-slate-800 flex items-center">
+                <i class="fas fa-home mr-2 text-indigo-600"></i>
+                ChaoYouHome
             </h1>
 
             <nav class="hidden md:block">
-                <div id="nav-logged-out-view" class="flex items-center gap-2 md:gap-4">
+                <div id="nav-logged-out-view" class="flex items-center gap-2 md:gap-3">
                     <button id="nav-login-btn"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100"><i
+                        class="px-4 py-2 text-sm font-medium text-indigo-600 bg-white border border-indigo-200 rounded-md hover:bg-indigo-50 transition-colors"><i
                             class="fas fa-sign-in-alt mr-2"></i>เข้าสู่ระบบ</button>
                     <button id="nav-register-btn"
-                        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"><i
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors"><i
                             class="fas fa-user-plus mr-2"></i>สมัครสมาชิก</button>
                 </div>
                 <div id="nav-logged-in-view" class="hidden items-center gap-4">
                     <button id="nav-post-btn"
-                        class="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 flex items-center">
+                        class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-md hover:bg-emerald-700 flex items-center transition-colors">
                         <i class="fas fa-plus mr-2"></i>ลงประกาศ
                     </button>
                     <button id="header-boost-button"
-                        class="px-4 py-2 text-sm font-medium text-white bg-purple-500 rounded-lg hover:bg-purple-600 flex items-center">
+                        class="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700 flex items-center transition-colors">
                         <i class="fas fa-rocket mr-2"></i>ดันโพสต์
                     </button>
 
                     <div class="relative">
                         <button id="profile-dropdown-button"
-                            class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold overflow-hidden">
+                            class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white text-xl font-bold overflow-hidden">
                         </button>
                         <div id="profile-dropdown-menu"
-                            class="hidden absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl z-30 border">
-                            <div class="p-4 border-b">
+                            class="hidden absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl z-30 border border-slate-200">
+                            <div class="p-4 border-b border-slate-200">
                                 <div class="flex items-center gap-3">
                                     <div id="dropdown-profile-pic-container"
-                                        class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold overflow-hidden cursor-pointer">
+                                        class="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center text-white text-2xl font-bold overflow-hidden cursor-pointer">
                                         <span id="dropdown-user-initial"></span>
                                     </div>
                                     <div>
-                                        <p id="dropdown-username" class="font-semibold"></p>
-                                        <p id="dropdown-email" class="text-sm text-gray-500"></p>
+                                        <p id="dropdown-username" class="font-semibold text-slate-800"></p>
+                                        <p id="dropdown-email" class="text-sm text-slate-500"></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="p-2">
                                 <a href="#" id="dropdown-profile-link"
-                                    class="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"><i
+                                    class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 rounded-md"><i
                                         class="fas fa-user-circle w-5 text-center"></i>โปรไฟล์</a>
                                 <a href="#" id="dropdown-post-link"
-                                    class="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"><i
+                                    class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 rounded-md"><i
                                         class="fas fa-plus w-5 text-center"></i>ลงประกาศ</a>
                                 <a href="#" id="dropdown-admin-link"
-                                    class="hidden items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"><i
+                                    class="hidden items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 rounded-md"><i
                                         class="fas fa-user-shield w-5 text-center"></i>Admin Panel</a>
-                                <hr class="my-2">
+                                <hr class="my-2 border-slate-200">
                                 <a href="#" id="dropdown-logout-link"
-                                    class="flex items-center gap-3 px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-md"><i
+                                    class="flex items-center gap-3 px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 rounded-md"><i
                                         class="fas fa-sign-out-alt w-5 text-center"></i>ออกจากระบบ</a>
                             </div>
                         </div>
@@ -88,20 +86,20 @@
             </nav>
 
             <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-2xl p-2">
+                <button id="mobile-menu-button" class="text-2xl p-2 text-slate-600">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </header>
 
         <div id="mobile-menu"
-            class="hidden md:hidden bg-white absolute top-[85px] left-0 right-0 z-30 shadow-lg border-t">
+            class="hidden md:hidden bg-white absolute top-[85px] left-0 right-0 z-30 shadow-lg border-t border-slate-200">
             <div id="mobile-nav-logged-out-view" class="p-4 space-y-2">
                 <button id="mobile-login-btn"
-                    class="w-full text-left px-4 py-3 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"><i
+                    class="w-full text-left px-4 py-3 text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100"><i
                         class="fas fa-sign-in-alt mr-2"></i>เข้าสู่ระบบ</button>
                 <button id="mobile-register-btn"
-                    class="w-full text-left px-4 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700"><i
+                    class="w-full text-left px-4 py-3 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"><i
                         class="fas fa-user-plus mr-2"></i>สมัครสมาชิก</button>
             </div>
             <div id="mobile-nav-logged-in-view" class="hidden">
@@ -111,7 +109,7 @@
 
         <main id="view-container">
             <div id="home-view">
-                <div id="banner-slideshow" class="relative rounded-xl overflow-hidden mb-8 h-64 md:h-96">
+                <div id="banner-slideshow" class="relative rounded-xl overflow-hidden mb-8 h-64 md:h-96 shadow-lg">
                     <div class="slide absolute inset-0 bg-cover bg-center"
                         style="background-image: url('https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=2071&auto=format&fit=crop');">
                     </div>
@@ -124,45 +122,45 @@
 
                     <div
                         class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white p-4">
-                        <h2 class="text-3xl md:text-5xl font-bold mb-3">ค้นหาห้องเช่า บ้านเช่า และคอนโด</h2>
+                        <h2 class="text-3xl md:text-5xl font-bold mb-3 tracking-tight">ค้นหาห้องเช่า บ้านเช่า และคอนโด</h2>
                         <p class="text-md md:text-xl">แหล่งรวมประกาศให้เช่าที่ดีที่สุดสำหรับคุณ</p>
                     </div>
 
                     <button id="prev-slide"
-                        class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full z-10">
+                        class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full z-10 transition-colors">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <button id="next-slide"
-                        class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full z-10">
+                        class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full z-10 transition-colors">
                         <i class="fas fa-chevron-right"></i>
                     </button>
 
                     <div id="slide-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>
                 </div>
 
-                <div id="search-section" class="bg-white p-6 rounded-xl shadow-md mb-8">
+                <div id="search-section" class="bg-white p-6 rounded-xl shadow-md mb-8 border border-slate-200">
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                         <select id="province-filter"
-                            class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                            class="w-full p-3 border border-slate-300 rounded-md bg-white focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition">
                             <option value="">ทุกจังหวัด</option>
                         </select>
                         <select id="district-filter"
-                            class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                            class="w-full p-3 border border-slate-300 rounded-md bg-white focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition">
                             <option value="">ทุกอำเภอ/เขต</option>
                         </select>
                         <select id="type-filter"
-                            class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                            class="w-full p-3 border border-slate-300 rounded-md bg-white focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition">
                             <option value="">ทุกประเภท</option>
                             <option value="ห้องเช่า">ห้องเช่า</option>
                             <option value="บ้านเช่า">บ้านเช่า</option>
                             <option value="คอนโด">คอนโด</option>
                         </select>
                         <input type="number" id="max-price-filter" placeholder="ราคาสูงสุด (บาท)"
-                            class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500"
+                            class="w-full p-3 border border-slate-300 rounded-md bg-white focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition"
                             maxlength="10"
                             oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         <button id="apply-filters-btn"
-                            class="w-full p-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors">
+                            class="w-full p-3 bg-indigo-600 text-white font-bold rounded-md hover:bg-indigo-700 transition-colors">
                             <i class="fas fa-search mr-2"></i>ค้นหา
                         </button>
                     </div>
@@ -170,20 +168,20 @@
 
                 <div id="listings-section-container">
                     <div id="boosted-listings-container">
-                        <h3 class="text-2xl font-bold mb-6" id="listings-title">ประกาศแนะนำ <i
-                                class="fas fa-star text-yellow-400"></i></h3>
+                        <h3 class="text-2xl font-bold mb-6 text-slate-800" id="listings-title">ประกาศแนะนำ <i
+                                class="fas fa-star text-amber-400"></i></h3>
                         <div id="listings-grid"
                             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             <div id="loading-spinner" class="col-span-full text-center p-10">
-                                <i class="fas fa-spinner fa-spin text-4xl text-blue-500"></i>
-                                <p class="mt-2">กำลังโหลดข้อมูล...</p>
+                                <i class="fas fa-spinner fa-spin text-4xl text-indigo-500"></i>
+                                <p class="mt-2 text-slate-600">กำลังโหลดข้อมูล...</p>
                             </div>
                         </div>
                         <div id="boosted-pagination-container" class="flex justify-center items-center mt-8 gap-2">
                         </div>
                     </div>
                     <div id="general-listings-container" class="mt-12">
-                        <h3 class="text-2xl font-bold mb-6" id="general-listings-title">ประกาศทั่วไป</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-slate-800" id="general-listings-title">ประกาศทั่วไป</h3>
                         <div id="general-listings-grid"
                             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         </div>
@@ -197,9 +195,9 @@
             <div id="listing-detail-view" class="hidden"></div>
 
             <div id="admin-view" class="hidden">
-                <h2 class="text-3xl font-bold mb-6">แผงควบคุมสำหรับผู้ดูแลระบบ</h2>
+                <h2 class="text-3xl font-bold mb-6 text-slate-800">แผงควบคุมสำหรับผู้ดูแลระบบ</h2>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <aside class="md:col-span-1 bg-white p-4 rounded-lg shadow-md h-fit">
+                    <aside class="md:col-span-1 bg-white p-4 rounded-lg shadow-md h-fit border border-slate-200">
                         <nav>
                             <ul class="space-y-2">
                                 <li><a href="#" id="admin-dashboard-link"
@@ -230,197 +228,197 @@
 
     <!-- Modals -->
     <div id="loginModal" class="modal w-11/12 md:w-1/3 bg-white rounded-xl shadow-2xl p-8">
-        <h3 class="text-2xl font-bold mb-6 text-center">เข้าสู่ระบบ</h3>
+        <h3 class="text-2xl font-bold mb-6 text-center text-slate-800">เข้าสู่ระบบ</h3>
         <form id="login-form">
             <div class="mb-4">
-                <label for="login-identifier" class="block text-sm font-medium text-gray-700 mb-1">อีเมล</label>
-                <input type="email" id="login-identifier" name="login-identifier" class="w-full p-3 border rounded-lg"
+                <label for="login-identifier" class="block text-sm font-medium text-slate-700 mb-1">อีเมล</label>
+                <input type="email" id="login-identifier" name="login-identifier" class="w-full p-3 border border-slate-300 rounded-md"
                     placeholder="กรอกอีเมลของคุณ" required maxlength="60">
             </div>
             <div class="mb-6">
-                <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
-                <input type="password" id="login-password" name="login-password" class="w-full p-3 border rounded-lg"
+                <label for="login-password" class="block text-sm font-medium text-slate-700 mb-1">รหัสผ่าน</label>
+                <input type="password" id="login-password" name="login-password" class="w-full p-3 border border-slate-300 rounded-md"
                     required maxlength="100">
             </div>
             <button type="submit"
-                class="w-full p-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">เข้าสู่ระบบ</button>
+                class="w-full p-3 bg-indigo-600 text-white font-bold rounded-md hover:bg-indigo-700 transition-colors">เข้าสู่ระบบ</button>
         </form>
-        <p id="login-error" class="text-red-500 text-sm mt-4 text-center"></p>
+        <p id="login-error" class="text-rose-600 text-sm mt-4 text-center"></p>
         <button data-close-modal="loginModal"
-            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
     </div>
 
     <div id="registerModal" class="modal w-11/12 md:w-1/3 bg-white rounded-xl shadow-2xl p-8">
-        <h3 class="text-2xl font-bold mb-6 text-center">สมัครสมาชิก</h3>
+        <h3 class="text-2xl font-bold mb-6 text-center text-slate-800">สมัครสมาชิก</h3>
         <form id="register-form">
             <div class="mb-4">
-                <label for="register-username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                <input type="text" id="register-username" name="register-username" class="w-full p-3 border rounded-lg"
+                <label for="register-username" class="block text-sm font-medium text-slate-700 mb-1">Username</label>
+                <input type="text" id="register-username" name="register-username" class="w-full p-3 border border-slate-300 rounded-md"
                     required maxlength="14" oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')">
             </div>
             <div class="mb-4">
-                <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">อีเมล</label>
-                <input type="email" id="register-email" name="register-email" class="w-full p-3 border rounded-lg"
+                <label for="register-email" class="block text-sm font-medium text-slate-700 mb-1">อีเมล</label>
+                <input type="email" id="register-email" name="register-email" class="w-full p-3 border border-slate-300 rounded-md"
                     required maxlength="60">
             </div>
             <div class="mb-4">
-                <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
+                <label for="register-password" class="block text-sm font-medium text-slate-700 mb-1">รหัสผ่าน</label>
                 <input type="password" id="register-password" name="register-password"
-                    class="w-full p-3 border rounded-lg" required maxlength="100">
+                    class="w-full p-3 border border-slate-300 rounded-md" required maxlength="100">
             </div>
             <div class="mb-6">
                 <label for="register-confirm-password"
-                    class="block text-sm font-medium text-gray-700 mb-1">ยืนยันรหัสผ่าน</label>
+                    class="block text-sm font-medium text-slate-700 mb-1">ยืนยันรหัสผ่าน</label>
                 <input type="password" id="register-confirm-password" name="register-confirm-password"
-                    class="w-full p-3 border rounded-lg" required maxlength="100">
+                    class="w-full p-3 border border-slate-300 rounded-md" required maxlength="100">
             </div>
             <button type="submit"
-                class="w-full p-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">สมัครสมาชิก</button>
+                class="w-full p-3 bg-indigo-600 text-white font-bold rounded-md hover:bg-indigo-700 transition-colors">สมัครสมาชิก</button>
         </form>
-        <p id="register-error" class="text-red-500 text-sm mt-4 text-center"></p>
+        <p id="register-error" class="text-rose-600 text-sm mt-4 text-center"></p>
         <button data-close-modal="registerModal"
-            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
     </div>
 
     <div id="postModal" class="modal w-11/12 md:w-2/3 lg:w-1/2 bg-white rounded-xl shadow-2xl p-8">
-        <h3 id="post-modal-title" class="text-2xl font-bold mb-6 text-center">ลงประกาศอสังหาริมทรัพย์</h3>
+        <h3 id="post-modal-title" class="text-2xl font-bold mb-6 text-center text-slate-800">ลงประกาศอสังหาริมทรัพย์</h3>
         <form id="post-form">
             <input type="hidden" id="post-id" name="post-id">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="md:col-span-2">
-                    <label for="post-title" class="block text-sm font-medium">หัวข้อประกาศ</label>
-                    <input type="text" id="post-title" name="post-title" class="w-full p-2 border rounded-lg"
+                    <label for="post-title" class="block text-sm font-medium text-slate-700">หัวข้อประกาศ</label>
+                    <input type="text" id="post-title" name="post-title" class="w-full p-2 border border-slate-300 rounded-md"
                         placeholder="เช่น คอนโดให้เช่า ใกล้ BTS อ่อนนุช" required maxlength="120">
                 </div>
                 <div>
-                    <label for="post-type" class="block text-sm font-medium">ประเภท</label>
-                    <select id="post-type" name="post-type" class="w-full p-2 border rounded-lg" required>
+                    <label for="post-type" class="block text-sm font-medium text-slate-700">ประเภท</label>
+                    <select id="post-type" name="post-type" class="w-full p-2 border border-slate-300 rounded-md" required>
                         <option value="ห้องเช่า">ห้องเช่า</option>
                         <option value="บ้านเช่า">บ้านเช่า</option>
                         <option value="คอนโด">คอนโด</option>
                     </select>
                 </div>
                 <div>
-                    <label for="post-price-rent" class="block text-sm font-medium">ราคาเช่า (บาท/เดือน)</label>
+                    <label for="post-price-rent" class="block text-sm font-medium text-slate-700">ราคาเช่า (บาท/เดือน)</label>
                     <input type="number" id="post-price-rent" name="post-price-rent"
-                        class="w-full p-2 border rounded-lg" placeholder="ระบุราคาเช่า" required maxlength="7"
+                        class="w-full p-2 border border-slate-300 rounded-md" placeholder="ระบุราคาเช่า" required maxlength="7"
                         oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
                 <div>
-                    <label for="post-price-initial" class="block text-sm font-medium">ราคาเข้าอยู่ครั้งแรก (บาท)</label>
+                    <label for="post-price-initial" class="block text-sm font-medium text-slate-700">ราคาเข้าอยู่ครั้งแรก (บาท)</label>
                     <input type="number" id="post-price-initial" name="post-price-initial"
-                        class="w-full p-2 border rounded-lg" placeholder="เช่น มัดจำ + ล่วงหน้า" maxlength="8"
+                        class="w-full p-2 border border-slate-300 rounded-md" placeholder="เช่น มัดจำ + ล่วงหน้า" maxlength="8"
                         oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
                 <div>
-                    <label for="post-available-date" class="block text-sm font-medium">วันที่เข้าอยู่ได้</label>
+                    <label for="post-available-date" class="block text-sm font-medium text-slate-700">วันที่เข้าอยู่ได้</label>
                     <input type="text" id="post-available-date" name="post-available-date"
-                        class="w-full p-2 border rounded-lg" placeholder="เลือกวันที่...">
+                        class="w-full p-2 border border-slate-300 rounded-md" placeholder="เลือกวันที่...">
                 </div>
                 <div>
-                    <label for="post-province" class="block text-sm font-medium">จังหวัด</label>
-                    <select id="post-province" name="post-province" class="w-full p-2 border rounded-lg" required>
+                    <label for="post-province" class="block text-sm font-medium text-slate-700">จังหวัด</label>
+                    <select id="post-province" name="post-province" class="w-full p-2 border border-slate-300 rounded-md" required>
                         <option value="">-- เลือกจังหวัด --</option>
                     </select>
                 </div>
                 <div>
-                    <label for="post-district" class="block text-sm font-medium">อำเภอ/เขต</label>
-                    <select id="post-district" name="post-district" class="w-full p-2 border rounded-lg" required>
+                    <label for="post-district" class="block text-sm font-medium text-slate-700">อำเภอ/เขต</label>
+                    <select id="post-district" name="post-district" class="w-full p-2 border border-slate-300 rounded-md" required>
                         <option value="">-- เลือกอำเภอ/เขต --</option>
                     </select>
                 </div>
                 <div class="md:col-span-2">
-                    <label for="post-description" class="block text-sm font-medium">รายละเอียดเพิ่มเติม</label>
+                    <label for="post-description" class="block text-sm font-medium text-slate-700">รายละเอียดเพิ่มเติม</label>
                     <textarea id="post-description" name="post-description" rows="4"
-                        class="w-full p-2 border rounded-lg" required maxlength="1000"></textarea>
+                        class="w-full p-2 border border-slate-300 rounded-md" required maxlength="1000"></textarea>
                 </div>
                 <div class="md:col-span-2">
-                    <label for="post-image-upload" class="block text-sm font-medium">รูปภาพ (สูงสุด 10 รูป)</label>
+                    <label for="post-image-upload" class="block text-sm font-medium text-slate-700">รูปภาพ (สูงสุด 10 รูป)</label>
                     <input type="file" id="post-image-upload" name="post-image-upload"
-                        class="w-full p-2 border rounded-lg" multiple accept="image/*">
+                        class="w-full p-2 border border-slate-300 rounded-md" multiple accept="image/*">
                     <div id="image-preview-container" class="mt-2 flex flex-wrap gap-2"></div>
                 </div>
                 <div>
-                    <label for="post-phone" class="block text-sm font-medium">เบอร์โทรศัพท์</label>
-                    <input type="tel" id="post-phone" name="post-phone" class="w-full p-2 border rounded-lg"
+                    <label for="post-phone" class="block text-sm font-medium text-slate-700">เบอร์โทรศัพท์</label>
+                    <input type="tel" id="post-phone" name="post-phone" class="w-full p-2 border border-slate-300 rounded-md"
                         placeholder="เช่น 0812345678" required maxlength="15"
                         oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
                 <div>
-                    <label for="post-line-id" class="block text-sm font-medium">Line ID</label>
-                    <input type="text" id="post-line-id" name="post-line-id" class="w-full p-2 border rounded-lg"
+                    <label for="post-line-id" class="block text-sm font-medium text-slate-700">Line ID</label>
+                    <input type="text" id="post-line-id" name="post-line-id" class="w-full p-2 border border-slate-300 rounded-md"
                         placeholder="เช่น mylineid" required maxlength="30">
                 </div>
             </div>
             <div class="mt-6 flex justify-end gap-4">
                 <button type="button" data-close-modal="postModal"
-                    class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">ยกเลิก</button>
+                    class="px-6 py-2 bg-slate-200 text-slate-800 font-medium rounded-md hover:bg-slate-300 transition-colors">ยกเลิก</button>
                 <button type="submit" id="post-submit-button"
-                    class="px-6 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600">บันทึกประกาศ</button>
+                    class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-md hover:bg-emerald-700 transition-colors">บันทึกประกาศ</button>
             </div>
         </form>
-        <p id="post-error" class="text-red-500 text-sm mt-4 text-center"></p>
+        <p id="post-error" class="text-rose-600 text-sm mt-4 text-center"></p>
         <button data-close-modal="postModal"
-            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
     </div>
 
     <div id="editProfileModal" class="modal w-11/12 md:w-1/3 bg-white rounded-xl shadow-2xl p-8">
-        <h3 class="text-2xl font-bold mb-6">แก้ไขข้อมูลส่วนตัว</h3>
+        <h3 class="text-2xl font-bold mb-6 text-slate-800">แก้ไขข้อมูลส่วนตัว</h3>
         <form id="edit-profile-form">
             <div class="mb-4">
-                <label for="edit-profile-phone" class="block text-sm font-medium">เบอร์โทรศัพท์</label>
-                <input type="tel" id="edit-profile-phone" name="edit-profile-phone" class="w-full p-2 border rounded-lg"
+                <label for="edit-profile-phone" class="block text-sm font-medium text-slate-700">เบอร์โทรศัพท์</label>
+                <input type="tel" id="edit-profile-phone" name="edit-profile-phone" class="w-full p-2 border border-slate-300 rounded-md"
                     maxlength="15" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
             <div class="mb-4">
-                <label for="edit-profile-line" class="block text-sm font-medium">Line ID</label>
-                <input type="text" id="edit-profile-line" name="edit-profile-line" class="w-full p-2 border rounded-lg"
+                <label for="edit-profile-line" class="block text-sm font-medium text-slate-700">Line ID</label>
+                <input type="text" id="edit-profile-line" name="edit-profile-line" class="w-full p-2 border border-slate-300 rounded-md"
                     maxlength="30">
             </div>
             <div class="mt-6 flex justify-end gap-4">
                 <button type="button" data-close-modal="editProfileModal"
-                    class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">ยกเลิก</button>
+                    class="px-6 py-2 bg-slate-200 text-slate-800 font-medium rounded-md hover:bg-slate-300 transition-colors">ยกเลิก</button>
                 <button type="submit"
-                    class="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">บันทึก</button>
+                    class="px-6 py-2 bg-indigo-600 text-white font-bold rounded-md hover:bg-indigo-700 transition-colors">บันทึก</button>
             </div>
         </form>
     </div>
 
     <div id="boostModal" class="modal w-11/12 md:w-2/3 lg:w-1/2 bg-white rounded-xl shadow-2xl p-8">
         <div id="boost-selection-view">
-            <h3 class="text-2xl font-bold mb-2 text-center">ดันประกาศของคุณ</h3>
-            <p class="text-center text-gray-500 mb-6">เลือกแพ็กเกจเพื่อทำให้ประกาศของคุณโดดเด่นและเข้าถึงผู้คนได้มากขึ้น
+            <h3 class="text-2xl font-bold mb-2 text-center text-slate-800">ดันประกาศของคุณ</h3>
+            <p class="text-center text-slate-500 mb-6">เลือกแพ็กเกจเพื่อทำให้ประกาศของคุณโดดเด่นและเข้าถึงผู้คนได้มากขึ้น
             </p>
 
             <div id="boost-plans-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             </div>
 
             <div id="payment-details-container" class="hidden">
-                <h4 class="font-bold text-lg mb-4 text-center">ขั้นตอนการชำระเงิน</h4>
+                <h4 class="font-bold text-lg mb-4 text-center text-slate-800">ขั้นตอนการชำระเงิน</h4>
                 <div class="flex flex-col md:flex-row gap-6 items-center">
                     <div class="w-full md:w-1/2 text-center">
-                        <p class="mb-2">สแกน QR Code นี้เพื่อชำระเงิน</p>
+                        <p class="mb-2 text-slate-600">สแกน QR Code นี้เพื่อชำระเงิน</p>
                         <img id="qr-code-image" src="img/p_qr_bank.png" alt="QR Code"
                             class="mx-auto rounded-lg shadow-md">
-                        <p class="mt-2 font-bold text-2xl">ยอดชำระ: <span id="payment-amount"></span> บาท</p>
+                        <p class="mt-2 font-bold text-2xl text-slate-800">ยอดชำระ: <span id="payment-amount"></span> บาท</p>
                     </div>
-                    <div class="w-full md:w-1/2 bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
-                        <p class="font-bold text-red-600 text-lg mb-2">สำคัญมาก!</p>
-                        <p class="mb-4">กรุณาใส่ "รหัสประกาศ" ด้านล่างนี้ในช่อง <strong
-                                class="text-blue-600">"บันทึกช่วยจำ"</strong> หรือ "Note" ตอนทำรายการโอนเงิน
+                    <div class="w-full md:w-1/2 bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-500">
+                        <p class="font-bold text-rose-600 text-lg mb-2">สำคัญมาก!</p>
+                        <p class="mb-4 text-slate-700">กรุณาใส่ "รหัสประกาศ" ด้านล่างนี้ในช่อง <strong
+                                class="text-indigo-600">"บันทึกช่วยจำ"</strong> หรือ "Note" ตอนทำรายการโอนเงิน
                             เพื่อให้เราตรวจสอบยอดได้ถูกต้อง</p>
-                        <p class="text-sm text-gray-600">รหัสประกาศ (Post ID):</p>
+                        <p class="text-sm text-slate-600">รหัสประกาศ (Post ID):</p>
                         <p id="payment-post-id"
-                            class="text-2xl font-mono bg-gray-200 p-2 rounded text-center break-all"></p>
+                            class="text-2xl font-mono bg-slate-200 p-2 rounded text-center break-all text-slate-800"></p>
                     </div>
                 </div>
             </div>
 
             <div class="mt-6 flex justify-end gap-4">
                 <button type="button" data-close-modal="boostModal"
-                    class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">ยกเลิก</button>
+                    class="px-6 py-2 bg-slate-200 text-slate-800 font-medium rounded-md hover:bg-slate-300 transition-colors">ยกเลิก</button>
                 <button type="button" id="confirm-payment-button"
-                    class="px-6 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 opacity-50 cursor-not-allowed"
+                    class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-md hover:bg-emerald-700 opacity-50 cursor-not-allowed transition-colors"
                     disabled>
                     <i class="fas fa-check-circle mr-2"></i>ยืนยันการชำระเงิน
                 </button>
@@ -428,29 +426,29 @@
         </div>
 
         <div id="boost-thanks-view" class="hidden text-center p-8">
-            <i class="fas fa-check-circle text-5xl text-green-500 mb-4"></i>
-            <h3 class="text-2xl font-bold mb-2">ขอบคุณครับ!</h3>
-            <p class="text-gray-600">เราได้รับคำขอดันประกาศของคุณแล้ว<br>ระบบจะทำการตรวจสอบและอนุมัติโพสต์ของคุณภายใน 10
+            <i class="fas fa-check-circle text-5xl text-emerald-500 mb-4"></i>
+            <h3 class="text-2xl font-bold mb-2 text-slate-800">ขอบคุณครับ!</h3>
+            <p class="text-slate-600">เราได้รับคำขอดันประกาศของคุณแล้ว<br>ระบบจะทำการตรวจสอบและอนุมัติโพสต์ของคุณภายใน 10
                 นาที</p>
         </div>
 
         <button data-close-modal="boostModal"
-            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
     </div>
 
     <div id="adminApproveBoostModal" class="modal w-11/12 md:w-1/3 bg-white rounded-xl shadow-2xl p-8">
-        <h3 class="text-2xl font-bold mb-4 text-center">อนุมัติการดันประกาศ</h3>
-        <p class="text-center mb-1">รหัสประกาศ:</p>
-        <p id="admin-boost-listing-id" class="text-center font-mono text-sm bg-gray-100 p-2 rounded mb-4"></p>
-        <p class="text-center mb-4">กรุณาเลือกแพ็กเกจที่ผู้ใช้ชำระเงิน:</p>
+        <h3 class="text-2xl font-bold mb-4 text-center text-slate-800">อนุมัติการดันประกาศ</h3>
+        <p class="text-center mb-1 text-slate-600">รหัสประกาศ:</p>
+        <p id="admin-boost-listing-id" class="text-center font-mono text-sm bg-slate-100 p-2 rounded mb-4"></p>
+        <p class="text-center mb-4 text-slate-600">กรุณาเลือกแพ็กเกจที่ผู้ใช้ชำระเงิน:</p>
         <form id="admin-approve-boost-form">
             <div id="admin-boost-plans-container" class="space-y-3 mb-6">
             </div>
             <div class="flex justify-end gap-4">
                 <button type="button" data-close-modal="adminApproveBoostModal"
-                    class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">ยกเลิก</button>
+                    class="px-6 py-2 bg-slate-200 text-slate-800 font-medium rounded-md hover:bg-slate-300 transition-colors">ยกเลิก</button>
                 <button type="submit"
-                    class="px-6 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600">อนุมัติ</button>
+                    class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-md hover:bg-emerald-700 transition-colors">อนุมัติ</button>
             </div>
         </form>
     </div>
@@ -458,42 +456,42 @@
     <div id="profilePictureModal" class="modal w-11/12 sm:w-1/3 md:w-1/4 bg-white rounded-xl shadow-2xl p-4">
         <div class="flex flex-col items-center">
             <div id="profile-pic-modal-preview-container"
-                class="w-48 h-48 rounded-full object-cover mb-4 border-4 border-gray-200 bg-gray-300 flex items-center justify-center">
+                class="w-48 h-48 rounded-full object-cover mb-4 border-4 border-slate-200 bg-slate-300 flex items-center justify-center">
             </div>
             <div class="w-full space-y-2">
                 <button id="view-profile-pic-btn"
-                    class="w-full text-left px-4 py-3 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center"><i
+                    class="w-full text-left px-4 py-3 text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 flex items-center transition-colors"><i
                         class="fas fa-eye w-5 mr-2"></i>ดูรูปภาพ</button>
                 <button id="change-profile-pic-btn"
-                    class="w-full text-left px-4 py-3 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center"><i
+                    class="w-full text-left px-4 py-3 text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 flex items-center transition-colors"><i
                         class="fas fa-camera w-5 mr-2"></i>เปลี่ยนรูปภาพ</button>
                 <button id="remove-profile-pic-btn"
-                    class="w-full text-left px-4 py-3 text-red-500 bg-red-50 rounded-lg hover:bg-red-100 flex items-center"><i
+                    class="w-full text-left px-4 py-3 text-rose-600 bg-rose-50 rounded-lg hover:bg-rose-100 flex items-center transition-colors"><i
                         class="fas fa-trash-alt w-5 mr-2"></i>ลบรูปภาพ</button>
             </div>
         </div>
         <button data-close-modal="profilePictureModal"
-            class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            class="absolute top-2 right-2 text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
     </div>
     <input type="file" id="profile-picture-upload" class="hidden" accept="image/*">
 
 
     <div id="alertModal" class="modal w-11/12 md:w-1/3 bg-white rounded-xl shadow-2xl p-8">
-        <h3 id="alert-modal-title" class="text-xl font-bold mb-4 text-center">แจ้งเตือน</h3>
-        <p id="alert-modal-text" class="text-center mb-6"></p>
+        <h3 id="alert-modal-title" class="text-xl font-bold mb-4 text-center text-slate-800">แจ้งเตือน</h3>
+        <p id="alert-modal-text" class="text-center mb-6 text-slate-600"></p>
         <div class="flex justify-center">
             <button id="alert-modal-ok-btn"
-                class="px-8 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">ตกลง</button>
+                class="px-8 py-2 bg-indigo-600 text-white font-bold rounded-md hover:bg-indigo-700 transition-colors">ตกลง</button>
         </div>
     </div>
 
     <div id="confirmModal" class="modal w-11/12 md:w-1/3 bg-white rounded-xl shadow-2xl p-8">
-        <h3 id="confirm-modal-title" class="text-xl font-bold mb-4 text-center">ยืนยันการกระทำ</h3>
-        <p id="confirm-modal-text" class="text-center mb-6"></p>
+        <h3 id="confirm-modal-title" class="text-xl font-bold mb-4 text-center text-slate-800">ยืนยันการกระทำ</h3>
+        <p id="confirm-modal-text" class="text-center mb-6 text-slate-600"></p>
         <div class="flex justify-center gap-4">
             <button id="confirm-modal-cancel-btn"
-                class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-400">ยกเลิก</button>
-            <button id="confirm-modal-confirm-btn" class="px-6 py-2 text-white font-bold rounded-lg">ยืนยัน</button>
+                class="px-6 py-2 bg-slate-200 text-slate-800 font-medium rounded-md hover:bg-slate-300 transition-colors">ยกเลิก</button>
+            <button id="confirm-modal-confirm-btn" class="px-6 py-2 text-white font-bold rounded-md transition-colors">ยืนยัน</button>
         </div>
     </div>
 

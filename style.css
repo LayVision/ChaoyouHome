@@ -1,7 +1,7 @@
 /* Base styles */
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: #f8f9fa;
+    background-color: #f8fafc; /* slate-50 */
     transition: background-color 0.3s, color 0.3s;
 }
 
@@ -51,8 +51,8 @@ body {
     position: absolute;
     top: 1rem;
     left: 1rem;
-    background-color: #ffc107;
-    color: #212529;
+    background-color: #f59e0b; /* amber-500 */
+    color: #1e293b; /* slate-800 */
     padding: 0.25rem 0.75rem;
     border-radius: 9999px;
     font-weight: 700;
@@ -69,6 +69,7 @@ body {
     transition: opacity 1s ease-in-out;
 }
 
+/* Image Upload Preview Styles */
 .upload-preview-container {
     position: relative;
 }
@@ -78,7 +79,7 @@ body {
     height: 100px;
     object-fit: cover;
     border-radius: 0.5rem;
-    border: 2px solid #ddd;
+    border: 2px solid #e2e8f0; /* slate-200 */
 }
 
 .upload-preview-img.is-cover {
@@ -101,31 +102,40 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.2s;
+}
+.set-cover-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .set-cover-btn.is-cover {
-    background-color: #f59e0b;
+    background-color: #f59e0b; /* amber-500 */
 }
 
 /* Admin page specific styles */
 #admin-view .admin-sidebar-link {
     transition: background-color 0.2s, color 0.2s;
+    color: #475569; /* slate-600 */
+}
+#admin-view .admin-sidebar-link:hover {
+    background-color: #f1f5f9; /* slate-100 */
+    color: #1e293b; /* slate-800 */
 }
 
 #admin-view .admin-sidebar-link.active {
-    background-color: #3b82f6;
-    /* bg-blue-600 */
+    background-color: #4f46e5;
+    /* bg-indigo-600 */
     color: white;
     font-weight: 700;
 }
 
 /* Boost Modal Styles */
 .boost-plan-card {
-    border: 2px solid #e5e7eb;
+    border: 2px solid #e2e8f0; /* slate-200 */
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .boost-plan-card.selected {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    border-color: #4f46e5; /* indigo-600 */
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.4);
 }
