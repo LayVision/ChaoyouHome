@@ -750,7 +750,7 @@ function populateGrid(gridElement, listings, emptyMessage) {
     listings.forEach(listing => {
         const card = createElement('div', ['bg-white', 'rounded-xl', 'shadow-md', 'overflow-hidden', 'transform', 'hover:-translate-y-1', 'transition-all', 'duration-300', 'cursor-pointer', 'relative', 'flex', 'flex-col', 'border', 'border-slate-200', 'hover:shadow-lg']);
         const imageUrl = listing.imageUrls?.[0] || 'https://placehold.co/600x400/e2e8f0/64748b?text=ไม่มีรูปภาพ';
-        const image = createElement('img', ['w-full', 'h-24', 'object-cover'], '', { src: imageUrl, alt: listing.title });
+        const image = createElement('img', ['w-full', 'h-48', 'object-cover'], '', { src: imageUrl, alt: listing.title });
         image.onerror = () => { image.src = 'https://placehold.co/600x400/e2e8f0/64748b?text=รูปภาพเสียหาย'; };
         if (listing.isBoosted) {
             const badge = createElement('div', ['boosted-badge'], ' ประกาศแนะนำ');
@@ -1495,7 +1495,7 @@ async function renderProfilePage(userId) {
                 const imageLink = createElement('a', ['block', 'md:w-48', 'flex-shrink-0'], '', { href: `#listing/${listing.id}` });
                 const imageUrl = listing.imageUrls?.[0] || 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป';
                 // MODIFIED: Changed image height class to 'h-32'
-                const image = createElement('img', ['w-full', 'h-32', 'md:h-full', 'object-cover'], '', { src: imageUrl });
+                const image = createElement('img', ['w-full', 'h-24', 'object-cover'], '', { src: imageUrl });
                 image.onerror = () => { image.src = 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป'; };
                 imageLink.appendChild(image);
 
