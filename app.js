@@ -1881,4 +1881,4 @@ window.addEventListener('DOMContentLoaded', () => {
             mobileMenu.classList.add('hidden');
         }
     });
-});```
+});
