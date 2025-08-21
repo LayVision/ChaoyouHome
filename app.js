@@ -36,7 +36,7 @@ let existingImageUrls = [];
 let currentAdminListings = [];
 let currentAdminUsers = [];
 const listingsPerPage = 8;
-const profileListingsPerPage = 5; // <-- The value is now 5
+const profileListingsPerPage = 5; // MODIFIED: Changed from 6 to 5
 let generalListingsCurrentPage = 1;
 let boostedListingsCurrentPage = 1;
 let profileCurrentPage = 1;
@@ -948,17 +948,27 @@ const boostPlans = [
 ];
 let selectedBoostPlan = null;
 let currentBoostingPostId = null;
+
 function openBoostModal(listingId) {
     currentBoostingPostId = listingId;
     selectedBoostPlan = null;
+
     document.getElementById('boost-selection-view').style.display = 'block';
     document.getElementById('boost-thanks-view').style.display = 'none';
     document.getElementById('payment-details-container').classList.add('hidden');
+    
     const confirmBtn = document.getElementById('confirm-payment-button');
     confirmBtn.disabled = true;
     confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+    const slipInput = document.getElementById('payment-slip-upload');
+    const slipFilename = document.getElementById('slip-filename');
+    slipInput.value = '';
+    slipFilename.textContent = '';
+    
     const plansContainer = document.getElementById('boost-plans-container');
     plansContainer.innerHTML = '';
+    
     boostPlans.forEach(plan => {
         const card = createElement('div', ['boost-plan-card', 'p-4', 'rounded-lg', 'cursor-pointer', 'text-center', 'bg-white']);
         card.dataset.planId = plan.id;
@@ -971,35 +981,79 @@ function openBoostModal(listingId) {
             selectedBoostPlan = plan;
             document.getElementById('payment-details-container').classList.remove('hidden');
             document.getElementById('payment-amount').textContent = plan.price;
-            document.getElementById('payment-post-id').textContent = currentBoostingPostId;
-            confirmBtn.disabled = false;
-            confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            if (slipInput.files.length > 0) {
+                confirmBtn.disabled = false;
+                confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
         };
         plansContainer.appendChild(card);
     });
+
+    slipInput.addEventListener('change', () => {
+        if (slipInput.files.length > 0) {
+            slipFilename.textContent = `ไฟล์ที่เลือก: ${slipInput.files[0].name}`;
+            if (selectedBoostPlan) {
+                confirmBtn.disabled = false;
+                confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        } else {
+            slipFilename.textContent = '';
+            confirmBtn.disabled = true;
+            confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    });
+
     openModal('boostModal');
 }
+
 document.getElementById('confirm-payment-button').addEventListener('click', async () => {
     if (!selectedBoostPlan || !currentBoostingPostId) return;
+
+    const slipInput = document.getElementById('payment-slip-upload');
+    const slipFile = slipInput.files[0];
+
+    if (!slipFile) {
+        showAlertModal("กรุณาอัปโหลดสลิปการโอนเงิน");
+        return;
+    }
+
+    const confirmBtn = document.getElementById('confirm-payment-button');
+    confirmBtn.disabled = true;
+    confirmBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>กำลังอัปโหลด...`;
+
     try {
+        const imageUrls = await uploadImages([slipFile]);
+        const slipUrl = imageUrls[0];
+
+        if (!slipUrl) {
+            throw new Error("ไม่สามารถอัปโหลดสลิปได้");
+        }
+
         const docRef = doc(db, "listings", currentBoostingPostId);
         await updateDoc(docRef, {
             boostStatus: 'pending',
             boostTier: selectedBoostPlan.id,
             boostPrice: selectedBoostPlan.price,
-            boostRequestedAt: serverTimestamp()
+            boostRequestedAt: serverTimestamp(),
+            paymentSlipUrl: slipUrl
         });
+
         document.getElementById('boost-selection-view').style.display = 'none';
         document.getElementById('boost-thanks-view').style.display = 'block';
         setTimeout(() => {
             closeModal('boostModal');
-            router(); 
+            router();
         }, 4000);
+
     } catch (error) {
         console.error("Error requesting boost:", error);
-        showAlertModal("เกิดข้อผิดพลาดในการส่งคำขอดันประกาศ กรุณาลองใหม่อีกครั้ง");
+        showAlertModal("เกิดข้อผิดพลาด: " + error.message);
+    } finally {
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>ยืนยันการชำระเงิน';
     }
 });
+
 
 async function renderAdminView(activeTab = 'dashboard') {
     const adminMainContent = document.getElementById('admin-main-content');
@@ -1179,11 +1233,15 @@ async function renderAdminBoostsTable() {
         tableContainer.innerHTML = `<div class="text-center text-rose-600 p-4">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
     }
 }
+
 function populateAdminBoostsTable(container, listings) {
     container.innerHTML = '';
-    if (listings.length === 0) { container.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่มีคำขอที่รอการอนุมัติ</p>`; return; }
+    if (listings.length === 0) {
+        container.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่มีคำขอที่รอการอนุมัติ</p>`;
+        return;
+    }
     const table = createElement('table', ['w-full', 'text-sm', 'text-left', 'text-slate-600']);
-    table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">รหัสประกาศ</th><th class="p-3">หัวข้อ</th><th class="p-3">แพ็กเกจที่ขอ</th><th class="p-3">ราคา</th><th class="p-3">วันที่ขอ</th><th class="p-3">จัดการ</th></tr></thead>`;
+    table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">รหัสประกาศ</th><th class="p-3">หัวข้อ</th><th class="p-3">แพ็กเกจ</th><th class="p-3">สลิป</th><th class="p-3">วันที่ขอ</th><th class="p-3">จัดการ</th></tr></thead>`;
     const tbody = createElement('tbody');
     listings.forEach(listing => {
         const plan = boostPlans.find(p => p.id === listing.boostTier);
@@ -1191,7 +1249,20 @@ function populateAdminBoostsTable(container, listings) {
         tr.appendChild(createElement('td', ['p-3', 'font-mono', 'text-xs'], listing.id));
         tr.appendChild(createElement('td', ['p-3', 'font-medium', 'text-slate-800'], listing.title));
         tr.appendChild(createElement('td', ['p-3'], plan ? plan.title : 'N/A'));
-        tr.appendChild(createElement('td', ['p-3'], `฿${listing.boostPrice || 'N/A'}`));
+        
+        const slipCell = createElement('td', ['p-3']);
+        if (listing.paymentSlipUrl) {
+            const slipLink = createElement('a', ['text-blue-600', 'hover:underline', 'font-semibold'], 'ดูสลิป', {
+                href: listing.paymentSlipUrl,
+                target: '_blank',
+                rel: 'noopener noreferrer'
+            });
+            slipCell.appendChild(slipLink);
+        } else {
+            slipCell.textContent = 'ไม่มี';
+        }
+        tr.appendChild(slipCell);
+
         tr.appendChild(createElement('td', ['p-3'], formatTimestamp(listing.boostRequestedAt)));
         const actionsCell = createElement('td', ['p-3', 'flex', 'gap-2']);
         const approveBtn = createElement('button', ['px-3', 'py-1', 'bg-emerald-600', 'text-white', 'rounded-md', 'hover:bg-emerald-700', 'text-xs', 'transition-colors'], 'อนุมัติ');
@@ -1205,6 +1276,7 @@ function populateAdminBoostsTable(container, listings) {
     table.appendChild(tbody);
     container.appendChild(table);
 }
+
 async function rejectBoost(listingId, ownerUid) {
     openConfirmModal(`คุณแน่ใจหรือไม่ว่าต้องการปฏิเสธคำขอดันโพสต์นี้?`, async () => {
         try {
@@ -1422,7 +1494,8 @@ async function renderProfilePage(userId) {
                 // Image Section
                 const imageLink = createElement('a', ['block', 'md:w-48', 'flex-shrink-0'], '', { href: `#listing/${listing.id}` });
                 const imageUrl = listing.imageUrls?.[0] || 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป';
-                const image = createElement('img', ['w-full', 'h-24', 'object-cover'], '', { src: imageUrl });
+                // MODIFIED: Changed image height class to 'h-32'
+                const image = createElement('img', ['w-full', 'h-32', 'md:h-full', 'object-cover'], '', { src: imageUrl });
                 image.onerror = () => { image.src = 'https://placehold.co/400x300/e2e8f0/64748b?text=ไม่มีรูป'; };
                 imageLink.appendChild(image);
 
@@ -1808,4 +1881,4 @@ window.addEventListener('DOMContentLoaded', () => {
             mobileMenu.classList.add('hidden');
         }
     });
-});
+});```
