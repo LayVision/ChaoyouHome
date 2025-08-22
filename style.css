@@ -1,11 +1,15 @@
-/* Base styles */
+/* Premium color scheme and modern styling */
+
+/* Base styles with premium typography */
 body {
   font-family: "Sarabun", sans-serif;
-  background-color: #f8f9fa;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   transition: background-color 0.3s, color 0.3s;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
-/* Modal styles */
+/* Enhanced modal styles with premium aesthetics */
 .modal-backdrop {
   display: none;
   position: fixed;
@@ -13,7 +17,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
   z-index: 40;
 }
 
@@ -46,29 +51,32 @@ body {
   z-index: 80;
 }
 
-/* Custom badge for boosted listings */
+/* Premium boosted badge with enhanced styling */
 .boosted-badge {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  background-color: #ffc107;
-  color: #212529;
-  padding: 0.25rem 0.75rem;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #1e293b;
+  padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-weight: 700;
   font-size: 0.8rem;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 0.5rem;
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
   z-index: 10;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Slideshow transition */
+/* Enhanced slideshow transitions */
 .slide {
-  transition: opacity 1s ease-in-out;
+  transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Premium upload preview styling */
 .upload-preview-container {
   position: relative;
 }
@@ -77,55 +85,295 @@ body {
   width: 100px;
   height: 100px;
   object-fit: cover;
-  border-radius: 0.5rem;
-  border: 2px solid #ddd;
+  border-radius: 1rem;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .upload-preview-img.is-cover {
-  border-color: #1c1c1c;
-  /* amber-500 */
+  border-color: #0ea5e9;
+  box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
+  transform: scale(1.05);
 }
 
 .set-cover-btn {
   position: absolute;
-  top: 0.25rem;
-  right: 0.25rem;
-  background-color: rgba(0, 0, 0, 0.5);
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(15, 23, 42, 0.8);
   color: white;
   border: none;
   border-radius: 9999px;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2rem;
+  height: 2rem;
   font-size: 0.8rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.set-cover-btn:hover {
+  background: rgba(15, 23, 42, 0.9);
+  transform: scale(1.1);
 }
 
 .set-cover-btn.is-cover {
-  background-color: #f59e0b;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
 }
 
-/* Admin page specific styles */
+/* Enhanced admin page styling */
 #admin-view .admin-sidebar-link {
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
 }
 
 #admin-view .admin-sidebar-link.active {
-  background-color: #3b82f6;
-  /* bg-blue-600 */
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
   color: white;
-  font-weight: 700;
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
+  transform: translateX(4px);
 }
 
-/* Boost Modal Styles */
+#admin-view .admin-sidebar-link:hover:not(.active) {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  transform: translateX(2px);
+}
+
+/* Premium boost modal styling */
 .boost-plan-card {
-  border: 2px solid #e5e7eb;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.boost-plan-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0ea5e9, #8b5cf6, #06b6d4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.boost-plan-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+}
+
+.boost-plan-card:hover::before {
+  opacity: 1;
 }
 
 .boost-plan-card.selected {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  border-color: #0ea5e9;
+  box-shadow: 0 25px 50px rgba(14, 165, 233, 0.25);
+  transform: translateY(-8px) scale(1.02);
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+.boost-plan-card.selected::before {
+  opacity: 1;
+}
+
+/* Enhanced form inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+select,
+textarea {
+  font-weight: 500;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+select:focus,
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1), 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Premium button enhancements */
+button {
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Enhanced card styling for listings */
+.listing-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 1.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.listing-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.listing-card:hover {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px) scale(1.02);
+  border-color: #cbd5e1;
+}
+
+.listing-card:hover::before {
+  opacity: 1;
+}
+
+/* Premium pagination styling */
+.pagination-btn {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pagination-btn:hover {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  border-color: #0ea5e9;
+  box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
+  transform: translateY(-2px);
+}
+
+.pagination-btn.active {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  border-color: #0ea5e9;
+  box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
+}
+
+/* Enhanced slide dots */
+.slide-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.slide-dot.active {
+  background: white;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  transform: scale(1.2);
+}
+
+/* Premium scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+}
+
+/* Enhanced loading spinner */
+.loading-spinner {
+  animation: premium-spin 2s linear infinite;
+}
+
+@keyframes premium-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Premium glass morphism effects */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 768px) {
+  .modal {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    max-height: calc(100vh - 2rem);
+  }
+
+  .boost-plan-card {
+    margin-bottom: 1rem;
+  }
+
+  .listing-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+}
+
+/* Premium focus states */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid #0ea5e9;
+  outline-offset: 2px;
+}
+
+/* Enhanced text selection */
+::selection {
+  background: rgba(14, 165, 233, 0.2);
+  color: #0f172a;
+}
+
+::-moz-selection {
+  background: rgba(14, 165, 233, 0.2);
+  color: #0f172a;
 }
