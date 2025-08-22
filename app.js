@@ -1433,7 +1433,7 @@ async function renderAdminListingsTable() {
       id: "admin-listings-search",
       name: "admin-listings-search",
       type: "text",
-      placeholder: "ค้นหาประกาศด้วยชื่อ หรืออีเมลผู้ใช้...",
+      placeholder: "ค้นหาประกาศด้วยชื่อ, อีเมลผู้ใช้, หรือรหัสประกาศ...",
     },
   )
   const tableContainer = createElement("div", ["overflow-x-auto"])
@@ -1452,7 +1452,8 @@ async function renderAdminListingsTable() {
         (l) =>
           l.title.toLowerCase().includes(searchTerm) ||
           l.ownerUsername.toLowerCase().includes(searchTerm) ||
-          l.ownerEmail.toLowerCase().includes(searchTerm),
+          l.ownerEmail.toLowerCase().includes(searchTerm) ||
+          l.id.toLowerCase().includes(searchTerm),
       )
       populateAdminListingsTable(tableContainer, filtered)
     })
@@ -1469,10 +1470,11 @@ function populateAdminListingsTable(container, listings) {
     return
   }
   const table = createElement("table", ["w-full", "text-sm", "text-left", "text-slate-600"])
-  table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">หัวข้อประกาศ</th><th class="p-3">ผู้ลงประกาศ</th><th class="p-3">ประเภท</th><th class="p-3">ราคา</th><th class="p-3">วันที่ลง</th><th class="p-3">จัดการ</th></tr></thead>`
+  table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">รหัสประกาศ</th><th class="p-3">หัวข้อประกาศ</th><th class="p-3">ผู้ลงประกาศ</th><th class="p-3">ประเภท</th><th class="p-3">ราคา</th><th class="p-3">วันที่ลง</th><th class="p-3">จัดการ</th></tr></thead>`
   const tbody = createElement("tbody")
   listings.forEach((listing) => {
     const tr = createElement("tr", ["border-b", "border-slate-200"])
+    tr.appendChild(createElement("td", ["p-3", "font-mono", "text-xs"], listing.id))
     tr.appendChild(createElement("td", ["p-3", "font-medium", "text-slate-800"], listing.title))
     tr.appendChild(createElement("td", ["p-3"], listing.ownerUsername || listing.ownerEmail))
     tr.appendChild(createElement("td", ["p-3"], listing.type))
