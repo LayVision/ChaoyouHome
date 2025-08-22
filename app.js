@@ -1917,19 +1917,43 @@ async function renderProfilePage(userId) {
     }
     profileCol.appendChild(profilePicContainer)
     profileCol.appendChild(createElement("h3", ["text-3xl", "font-bold", "mt-4", "text-slate-800"], userData.username))
-    profileCol.appendChild(createElement("p", ["text-slate-500", "mt-1"], userData.email))
+    // MODIFIED: User email is now hidden from the profile page.
+    // profileCol.appendChild(createElement("p", ["text-slate-500", "mt-1"], userData.email));
     const joinedDate = userData.createdAt ? formatTimestamp(userData.createdAt, true) : "ไม่ระบุ"
     const joinedP = createElement("p", ["text-sm", "text-slate-400", "mt-4"], `เข้าร่วมเมื่อ ${joinedDate}`)
     joinedP.prepend(createElement("i", ["fas", "fa-calendar-alt", "mr-2"]))
     profileCol.appendChild(joinedP)
     const contactDiv = createElement("div", ["text-left", "mt-6", "pt-4", "border-t", "border-slate-200"])
     contactDiv.appendChild(createElement("h4", ["font-semibold", "mb-2", "text-slate-700"], "ข้อมูลติดต่อสาธารณะ"))
-    const phoneP = createElement("p", ["text-slate-800", "text-sm", "mb-1"], `${userData.phone || "ยังไม่ได้ระบุ"}`)
+
+    // MODIFIED: Made phone number a clickable "tel:" link.
+    const phoneP = createElement("p", ["text-slate-800", "text-sm", "mb-1"])
     phoneP.prepend(createElement("i", ["fas", "fa-phone", "mr-2", "w-4", "text-center", "text-slate-400"]))
+    if (userData.phone) {
+      const phoneLink = createElement("a", ["text-indigo-600", "hover:underline"], userData.phone, {
+        href: `tel:${userData.phone}`,
+      })
+      phoneP.appendChild(phoneLink)
+    } else {
+      phoneP.append("ยังไม่ได้ระบุ")
+    }
     contactDiv.appendChild(phoneP)
-    const lineP = createElement("p", ["text-slate-800", "text-sm"], `${userData.lineId || "ยังไม่ได้ระบุ"}`)
+
+    // MODIFIED: Made Line ID a clickable link to add the user on Line.
+    const lineP = createElement("p", ["text-slate-800", "text-sm"])
     lineP.prepend(createElement("i", ["fab", "fa-line", "mr-2", "w-4", "text-center", "text-slate-400"]))
+    if (userData.lineId) {
+      const lineLink = createElement("a", ["text-emerald-600", "hover:underline"], userData.lineId, {
+        href: `https://line.me/ti/p/~${userData.lineId}`,
+        target: "_blank",
+        rel: "noopener noreferrer",
+      })
+      lineP.appendChild(lineLink)
+    } else {
+      lineP.append("ยังไม่ได้ระบุ")
+    }
     contactDiv.appendChild(lineP)
+
     profileCol.appendChild(contactDiv)
     if (currentUser && currentUser.uid === userId) {
       const editBtn = createElement(
