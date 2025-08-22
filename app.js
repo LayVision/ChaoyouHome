@@ -1220,15 +1220,24 @@ async function deleteListing(id) {
     "คุณแน่ใจหรือไม่ว่าต้องการลบประกาศนี้?",
     async () => {
       try {
-        await deleteDoc(doc(db, "listings", id))
-        navigateToHome()
+        const currentHash = window.location.hash;
+        await deleteDoc(doc(db, "listings", id));
+        showAlertModal("ลบประกาศสำเร็จ!");
+
+        if (currentHash === `#listing/${id}`) {
+          // If deleting from the detail page, go home
+          navigateToHome();
+        } else {
+          // Otherwise, just refresh the current list view (admin or profile)
+          router();
+        }
       } catch (error) {
-        console.error("Error deleting document: ", error)
-        showAlertModal("เกิดข้อผิดพลาดในการลบ")
+        console.error("Error deleting document: ", error);
+        showAlertModal("เกิดข้อผิดพลาดในการลบ");
       }
     },
     "bg-rose-600 hover:bg-rose-700",
-  )
+  );
 }
 
 const boostPlans = [
@@ -2051,8 +2060,47 @@ async function renderProfilePage(userId) {
         detailsContainer.append(priceSpan, locationSpan, dateSpan)
         contentDiv.appendChild(detailsContainer)
 
-        contentDiv.appendChild(createElement("div", ["flex-grow"]))
-        contentDiv.appendChild(createElement("p", ["text-xs", "text-slate-400", "mt-2"], `รหัสประกาศ: ${listing.id}`))
+        contentDiv.appendChild(createElement("div", ["flex-grow"])) // Pushes the footer to the bottom
+
+        // --- NEW: Footer for actions and ID ---
+        const footerDiv = createElement("div", [
+          "pt-3",
+          "mt-3",
+          "border-t",
+          "border-slate-200",
+          "flex",
+          "justify-between",
+          "items-center",
+        ])
+
+        // Action Buttons (Edit/Delete) are only shown to the owner
+        if (currentUser && currentUser.uid === userId) {
+          const actionButtons = createElement("div", ["flex", "gap-3"])
+
+          const editBtn = createElement("button", ["text-sm", "text-amber-600", "hover:underline", "font-medium"])
+          editBtn.innerHTML = '<i class="fas fa-edit mr-1"></i>แก้ไข'
+          editBtn.onclick = (e) => {
+            e.stopPropagation() // Prevent card click navigation
+            editListing(listing.id)
+          }
+
+          const deleteBtn = createElement("button", ["text-sm", "text-rose-600", "hover:underline", "font-medium"])
+          deleteBtn.innerHTML = '<i class="fas fa-trash mr-1"></i>ลบ'
+          deleteBtn.onclick = (e) => {
+            e.stopPropagation() // Prevent card click navigation
+            deleteListing(listing.id)
+          }
+
+          actionButtons.append(editBtn, deleteBtn)
+          footerDiv.appendChild(actionButtons)
+        } else {
+          // Add an empty div to maintain alignment if no buttons are shown
+          footerDiv.appendChild(createElement("div"))
+        }
+
+        // Listing ID
+        footerDiv.appendChild(createElement("p", ["text-xs", "text-slate-400"], `รหัสประกาศ: ${listing.id}`))
+        contentDiv.appendChild(footerDiv)
 
         // Boost/Action Section
         const boostSection = createElement("div", [
