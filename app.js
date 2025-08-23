@@ -738,15 +738,14 @@ async function fetchListings(filters = {}, fromListing = false) {
       }
     })
 
+    // MODIFIED: Sort by boosted status first, then by original creation date.
+    // This prevents edited posts from moving to the top.
     filteredListings.sort((a, b) => {
       if (a.isBoosted && !b.isBoosted) return -1
       if (!a.isBoosted && b.isBoosted) return 1
-      const updatedAtA = a.updatedAt?.toMillis() || 0
-      const updatedAtB = b.updatedAt?.toMillis() || 0
-      if (updatedAtA !== updatedAtB) {
-        return updatedAtB - updatedAtA
-      }
-      return (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0)
+      const createdAtA = a.createdAt?.toMillis() || 0
+      const createdAtB = b.createdAt?.toMillis() || 0
+      return createdAtB - createdAtA
     })
     renderListings(filteredListings, Object.keys(filters).length > 0 && Object.values(filters).some((v) => v))
   } catch (error) {
@@ -926,12 +925,9 @@ function populateGrid(gridElement, listings, emptyMessage) {
       "border-t",
       "border-slate-200",
     ])
-    const dateToFormat = listing.createdAt // MODIFIED: Always use the creation date for the main display.
+    // MODIFIED: Removed the "edited" label. The card now only shows the original post time.
+    const dateToFormat = listing.createdAt
     const dateSpan = createElement("span", ["font-semibold"], formatTimestamp(dateToFormat))
-    if (listing.updatedAt && listing.createdAt && listing.updatedAt.seconds > listing.createdAt.seconds + 60) {
-      // This logic remains the same to add the "edited" label when appropriate.
-      dateSpan.appendChild(createElement("span", ["text-amber-600", "ml-1"], "(แก้ไขล่าสุด)"))
-    }
     footerDiv.appendChild(dateSpan)
 
     contentDiv.appendChild(footerDiv)
@@ -1031,16 +1027,7 @@ async function renderListingDetailPage(listingId) {
     postedDateSpan.prepend(createElement("i", ["fas", "fa-calendar-alt", "mr-1"]));
     detailsHeader.appendChild(postedDateSpan);
 
-    // Check if it has been updated and add a separate line for it.
-    if (listing.updatedAt && listing.createdAt && listing.updatedAt.seconds > listing.createdAt.seconds + 60) {
-      const updatedDateSpan = createElement(
-        "span",
-        ["text-sm", "text-amber-600", "self-start", "sm:self-center", "ml-4"],
-        `(แก้ไขล่าสุดเมื่อ ${formatTimestamp(listing.updatedAt, true)})`,
-      );
-      updatedDateSpan.prepend(createElement("i", ["fas", "fa-edit", "mr-1"]));
-      detailsHeader.appendChild(updatedDateSpan);
-    }
+    // MODIFIED: Removed the block that showed the "edited" timestamp.
 
     detailsCol.appendChild(detailsHeader)
     detailsCol.appendChild(
