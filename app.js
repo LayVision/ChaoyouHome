@@ -1024,22 +1024,22 @@ async function renderListingDetailPage(listingId) {
     )
 
     const postedDateSpan = createElement(
-        "span",
-        ["text-sm", "text-slate-500", "self-start", "sm:self-center"],
-        `โพสต์เมื่อ ${formatTimestamp(listing.createdAt, true)}`, // Show original post date
+      "span",
+      ["text-sm", "text-slate-500", "self-start", "sm:self-center"],
+      `โพสต์เมื่อ ${formatTimestamp(listing.createdAt, true)}`, // Show original post date
     );
     postedDateSpan.prepend(createElement("i", ["fas", "fa-calendar-alt", "mr-1"]));
     detailsHeader.appendChild(postedDateSpan);
 
     // Check if it has been updated and add a separate line for it.
     if (listing.updatedAt && listing.createdAt && listing.updatedAt.seconds > listing.createdAt.seconds + 60) {
-        const updatedDateSpan = createElement(
-            "span",
-            ["text-sm", "text-amber-600", "self-start", "sm:self-center", "ml-4"],
-            `(แก้ไขล่าสุดเมื่อ ${formatTimestamp(listing.updatedAt, true)})`,
-        );
-        updatedDateSpan.prepend(createElement("i", ["fas", "fa-edit", "mr-1"]));
-        detailsHeader.appendChild(updatedDateSpan);
+      const updatedDateSpan = createElement(
+        "span",
+        ["text-sm", "text-amber-600", "self-start", "sm:self-center", "ml-4"],
+        `(แก้ไขล่าสุดเมื่อ ${formatTimestamp(listing.updatedAt, true)})`,
+      );
+      updatedDateSpan.prepend(createElement("i", ["fas", "fa-edit", "mr-1"]));
+      detailsHeader.appendChild(updatedDateSpan);
     }
 
     detailsCol.appendChild(detailsHeader)
