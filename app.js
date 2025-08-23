@@ -926,11 +926,10 @@ function populateGrid(gridElement, listings, emptyMessage) {
       "border-t",
       "border-slate-200",
     ])
-    footerDiv.appendChild(createElement("span", [], listing.type))
-
-    const dateToFormat = listing.updatedAt || listing.createdAt
+    const dateToFormat = listing.createdAt // MODIFIED: Always use the creation date for the main display.
     const dateSpan = createElement("span", ["font-semibold"], formatTimestamp(dateToFormat))
     if (listing.updatedAt && listing.createdAt && listing.updatedAt.seconds > listing.createdAt.seconds + 60) {
+      // This logic remains the same to add the "edited" label when appropriate.
       dateSpan.appendChild(createElement("span", ["text-amber-600", "ml-1"], "(แก้ไขล่าสุด)"))
     }
     footerDiv.appendChild(dateSpan)
@@ -1024,14 +1023,24 @@ async function renderListingDetailPage(listingId) {
       ),
     )
 
-    const dateToFormat = listing.updatedAt || listing.createdAt
-    const dateSpan = createElement(
-      "span",
-      ["text-sm", "text-slate-500", "self-start", "sm:self-center"],
-      `อัปเดตเมื่อ ${formatTimestamp(dateToFormat)}`,
-    )
-    dateSpan.prepend(createElement("i", ["fas", "fa-calendar-alt", "mr-1"]))
-    detailsHeader.appendChild(dateSpan)
+    const postedDateSpan = createElement(
+        "span",
+        ["text-sm", "text-slate-500", "self-start", "sm:self-center"],
+        `โพสต์เมื่อ ${formatTimestamp(listing.createdAt, true)}`, // Show original post date
+    );
+    postedDateSpan.prepend(createElement("i", ["fas", "fa-calendar-alt", "mr-1"]));
+    detailsHeader.appendChild(postedDateSpan);
+
+    // Check if it has been updated and add a separate line for it.
+    if (listing.updatedAt && listing.createdAt && listing.updatedAt.seconds > listing.createdAt.seconds + 60) {
+        const updatedDateSpan = createElement(
+            "span",
+            ["text-sm", "text-amber-600", "self-start", "sm:self-center", "ml-4"],
+            `(แก้ไขล่าสุดเมื่อ ${formatTimestamp(listing.updatedAt, true)})`,
+        );
+        updatedDateSpan.prepend(createElement("i", ["fas", "fa-edit", "mr-1"]));
+        detailsHeader.appendChild(updatedDateSpan);
+    }
 
     detailsCol.appendChild(detailsHeader)
     detailsCol.appendChild(
