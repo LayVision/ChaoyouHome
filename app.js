@@ -60,9 +60,11 @@ let currentAdminListings = []
 let currentAdminUsers = []
 const listingsPerPage = 8
 const profileListingsPerPage = 5 // MODIFIED: Changed from 6 to 5
+const adminListingsPerPage = 25 // NEW: Pagination for admin listings
 let generalListingsCurrentPage = 1
 let boostedListingsCurrentPage = 1
 let profileCurrentPage = 1
+let adminListingsCurrentPage = 1 // NEW: State for admin listings page
 let currentGeneralListings = []
 let currentBoostedListings = []
 let currentHash = ""
@@ -1453,7 +1455,8 @@ async function renderAdminListingsTable() {
     },
   )
   const tableContainer = createElement("div", ["overflow-x-auto"])
-  container.append(searchInput, tableContainer)
+  const paginationContainer = createElement("div", {}) // NEW: Container for pagination controls
+  container.append(searchInput, tableContainer, paginationContainer) // MODIFIED: Added paginationContainer
   adminMainContent.appendChild(container)
   tableContainer.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin text-2xl text-indigo-500"></i></div>`
   try {
@@ -1464,6 +1467,7 @@ async function renderAdminListingsTable() {
     })
     searchInput.addEventListener("input", (e) => {
       const searchTerm = e.target.value.toLowerCase()
+      adminListingsCurrentPage = 1 // NEW: Reset to page 1 on search
       const filtered = currentAdminListings.filter(
         (l) =>
           l.title.toLowerCase().includes(searchTerm) ||
@@ -1471,24 +1475,32 @@ async function renderAdminListingsTable() {
           l.ownerEmail.toLowerCase().includes(searchTerm) ||
           l.id.toLowerCase().includes(searchTerm),
       )
-      populateAdminListingsTable(tableContainer, filtered)
+      populateAdminListingsTable(tableContainer, paginationContainer, filtered)
     })
-    populateAdminListingsTable(tableContainer, currentAdminListings)
+    populateAdminListingsTable(tableContainer, paginationContainer, currentAdminListings)
   } catch (error) {
     console.error("Error fetching for admin panel:", error)
     tableContainer.innerHTML = `<div class="text-center text-rose-600 p-4">เกิดข้อผิดพลาด (อาจไม่มีสิทธิ์เข้าถึง)</div>`
   }
 }
-function populateAdminListingsTable(container, listings) {
-  container.innerHTML = ""
+
+function populateAdminListingsTable(tableContainer, paginationContainer, listings) {
+  tableContainer.innerHTML = ""
   if (listings.length === 0) {
-    container.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่พบประกาศ</p>`
+    tableContainer.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่พบประกาศ</p>`
+    paginationContainer.innerHTML = "" // NEW: Clear pagination if no results
     return
   }
+
+  // NEW: Pagination logic
+  const start = (adminListingsCurrentPage - 1) * adminListingsPerPage
+  const end = start + adminListingsPerPage
+  const pageListings = listings.slice(start, end)
+
   const table = createElement("table", ["w-full", "text-sm", "text-left", "text-slate-600"])
   table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">รหัสประกาศ</th><th class="p-3">หัวข้อประกาศ</th><th class="p-3">ผู้ลงประกาศ</th><th class="p-3">ประเภท</th><th class="p-3">ราคา</th><th class="p-3">วันที่ลง</th><th class="p-3">จัดการ</th></tr></thead>`
   const tbody = createElement("tbody")
-  listings.forEach((listing) => {
+  pageListings.forEach((listing) => {
     const tr = createElement("tr", ["border-b", "border-slate-200"])
     tr.appendChild(createElement("td", ["p-3", "font-mono", "text-xs"], listing.id))
     tr.appendChild(createElement("td", ["p-3", "font-medium", "text-slate-800"], listing.title))
@@ -1523,7 +1535,32 @@ function populateAdminListingsTable(container, listings) {
     tbody.appendChild(tr)
   })
   table.appendChild(tbody)
-  container.appendChild(table)
+  tableContainer.appendChild(table)
+  renderAdminListingsPagination(paginationContainer, listings.length)
+}
+// NEW: Function to render pagination controls for the admin listings table
+function renderAdminListingsPagination(paginationContainer, totalListings) {
+  paginationContainer.innerHTML = ""
+  const totalPages = Math.ceil(totalListings / adminListingsPerPage)
+
+  if (totalPages <= 1) return
+
+  const paginationWrapper = createElement("div", ["flex", "justify-center", "items-center", "mt-6", "gap-2"])
+
+  for (let i = 1; i <= totalPages; i++) {
+    const pageButton = createElement("button", ["px-4", "py-2", "border", "rounded-md", "transition-colors", "text-sm"])
+    pageButton.textContent = i
+    if (i === adminListingsCurrentPage) {
+      pageButton.classList.add("bg-indigo-600", "text-white", "border-indigo-600")
+    } else {
+      pageButton.classList.add("bg-white", "text-slate-700", "hover:bg-slate-100", "border-slate-300")
+    }
+    pageButton.onclick = () => {
+      window.location.hash = `#admin/listings?page=${i}`
+    }
+    paginationWrapper.appendChild(pageButton)
+  }
+  paginationContainer.appendChild(paginationWrapper)
 }
 async function renderAdminUsersTable() {
   const adminMainContent = document.getElementById("admin-main-content")
@@ -2260,9 +2297,18 @@ function router() {
     fetchListings(filters, fromListing)
   } else if (newHash.startsWith("#admin")) {
     if (currentUser && currentUser.role === "admin") {
-      const parts = newHash.split("/")
-      const activeTab = parts[1] || "dashboard" // Default to dashboard
+      const hashParts = newHash.split("?")
+      const routePart = hashParts[0]
+      const queryPart = hashParts[1]
+      const routeSegments = routePart.split("/")
+      const activeTab = routeSegments[1] || "dashboard"
+
       adminView.classList.remove("hidden")
+
+      if (activeTab === "listings") {
+        const params = new URLSearchParams(queryPart)
+        adminListingsCurrentPage = Number.parseInt(params.get("page"), 10) || 1
+      }
       renderAdminView(activeTab)
     } else {
       navigateToHome()
