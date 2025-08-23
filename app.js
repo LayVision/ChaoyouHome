@@ -231,14 +231,14 @@ function populateProvinceDropdowns() {
 
   // --- NEW CODE START ---
   // เพิ่ม "ตัวดักฟัง" ให้กับช่องฟิลเตอร์จังหวัด
-  provinceFilter.addEventListener("change", () => 
+  provinceFilter.addEventListener("change", () =>
     populateDistrictDropdowns(provinceFilter.value, "district-filter")
   );
   // --- NEW CODE END ---
 
   // --- MODIFIED LINE ---
   // อัปเดตการเรียกใช้ฟังก์ชันเดิมให้ส่ง ID ของช่องอำเภอไปด้วย
-  postProvince.addEventListener("change", () => 
+  postProvince.addEventListener("change", () =>
     populateDistrictDropdowns(postProvince.value, "post-district")
   );
 }
@@ -437,33 +437,50 @@ async function initializeAuth() {
 }
 
 registerForm.addEventListener("submit", async (e) => {
-  e.preventDefault()
-  const username = document.getElementById("register-username").value.trim()
-  const usernameLower = username.toLowerCase()
-  const email = document.getElementById("register-email").value
-  const password = document.getElementById("register-password").value
-  const confirmPassword = document.getElementById("register-confirm-password").value
-  const errorEl = document.getElementById("register-error")
-  errorEl.textContent = ""
+  e.preventDefault();
+  const username = document.getElementById("register-username").value.trim();
+  const usernameLower = username.toLowerCase();
+  const email = document.getElementById("register-email").value;
+  const password = document.getElementById("register-password").value;
+  const confirmPassword = document.getElementById("register-confirm-password").value;
+  const errorEl = document.getElementById("register-error");
+  errorEl.textContent = "";
 
-  const usernameRegex = /^[a-zA-Z0-9]+$/
+  const usernameRegex = /^[a-zA-Z0-9]+$/;
   if (!usernameRegex.test(username)) {
-    errorEl.textContent = "Username ต้องเป็นภาษาอังกฤษหรือตัวเลขเท่านั้น"
-    return
+    errorEl.textContent = "Username ต้องเป็นภาษาอังกฤษหรือตัวเลขเท่านั้น";
+    return;
   }
 
   if (!username) {
-    errorEl.textContent = "กรุณาใส่ Username"
-    return
+    errorEl.textContent = "กรุณาใส่ Username";
+    return;
   }
   if (password !== confirmPassword) {
-    errorEl.textContent = "รหัสผ่านไม่ตรงกัน"
-    return
+    errorEl.textContent = "รหัสผ่านไม่ตรงกัน";
+    return;
   }
 
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-    const user = userCredential.user
+    // --- NEW: Check for duplicate username START ---
+    // 1. สร้าง query เพื่อค้นหา username (ตัวพิมพ์เล็ก) ในฐานข้อมูล
+    const q = query(usersCollection, where("username_lowercase", "==", usernameLower));
+
+    // 2. สั่งให้ query ทำงาน
+    const querySnapshot = await getDocs(q);
+
+    // 3. ตรวจสอบว่าผลลัพธ์ที่ได้ว่างเปล่าหรือไม่
+    if (!querySnapshot.empty) {
+      // ถ้าไม่ว่างเปล่า แสดงว่ามีคนใช้ username นี้แล้ว
+      errorEl.textContent = "Username นี้ถูกใช้งานแล้ว";
+      return; // หยุดการทำงานทันที
+    }
+    // --- NEW: Check for duplicate username END ---
+
+
+    // ถ้า username ไม่ซ้ำ ให้ดำเนินการสร้างบัญชีต่อไป
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
     await setDoc(doc(db, "users", user.uid), {
       username: username,
@@ -473,15 +490,15 @@ registerForm.addEventListener("submit", async (e) => {
       phone: "",
       lineId: "",
       photoURL: "",
-    })
+    });
 
-    closeModal("registerModal")
-    registerForm.reset()
+    closeModal("registerModal");
+    registerForm.reset();
   } catch (error) {
-    console.error("Register error:", error)
-    errorEl.textContent = translateFirebaseError(error.code)
+    console.error("Register error:", error);
+    errorEl.textContent = translateFirebaseError(error.code);
   }
-})
+});
 
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault()
@@ -863,7 +880,7 @@ function renderBoostedPaginationControls() {
       const params = new URLSearchParams(window.location.hash.substring(window.location.hash.indexOf("?")))
       params.set("boostedPage", i)
       window.location.hash = `home?${params.toString()}`
-      
+
       // THIS IS THE NEW PART: Scroll to the boosted listings container
       setTimeout(() => {
         const targetElement = document.getElementById("boosted-listings-container");
@@ -2378,7 +2395,7 @@ function updateFilterUIFromParams(params) {
   // 2. เรียกใช้ฟังก์ชันผู้ช่วยเพื่อสร้างรายการ "อำเภอ" ที่ถูกต้อง
   // โดยส่งชื่อจังหวัดและ ID ของช่องอำเภอในฟิลเตอร์ ("district-filter") ไปให้
   populateDistrictDropdowns(province, "district-filter");
-  
+
   // 3. หน่วงเวลาเล็กน้อยเพื่อให้แน่ใจว่ารายการอำเภอถูกสร้างเสร็จ
   setTimeout(() => {
     // แล้วจึงตั้งค่าช่อง "อำเภอ" จากค่าใน URL
