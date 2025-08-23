@@ -228,17 +228,33 @@ function populateProvinceDropdowns() {
     provinceFilter.add(new Option(prov, prov))
     postProvince.add(new Option(prov, prov))
   })
-  postProvince.addEventListener("change", () => populateDistrictDropdowns(postProvince.value))
+
+  // --- NEW CODE START ---
+  // เพิ่ม "ตัวดักฟัง" ให้กับช่องฟิลเตอร์จังหวัด
+  provinceFilter.addEventListener("change", () => 
+    populateDistrictDropdowns(provinceFilter.value, "district-filter")
+  );
+  // --- NEW CODE END ---
+
+  // --- MODIFIED LINE ---
+  // อัปเดตการเรียกใช้ฟังก์ชันเดิมให้ส่ง ID ของช่องอำเภอไปด้วย
+  postProvince.addEventListener("change", () => 
+    populateDistrictDropdowns(postProvince.value, "post-district")
+  );
 }
 
-function populateDistrictDropdowns(province) {
-  const postDistrict = document.getElementById("post-district")
-  postDistrict.length = 1
+function populateDistrictDropdowns(province, districtElementId) {
+  const districtDropdown = document.getElementById(districtElementId);
+  if (!districtDropdown) return; // เพิ่มการตรวจสอบเผื่อไม่เจอ element
+
+  districtDropdown.length = 1; // ล้างค่าเก่าออก
+  districtDropdown.value = ""; // ตั้งค่าให้เป็นค่าว่าง
+
   if (province && thailandData[province]) {
-    const districts = Object.keys(thailandData[province]).sort()
+    const districts = Object.keys(thailandData[province]).sort();
     districts.forEach((dist) => {
-      postDistrict.add(new Option(dist, dist))
-    })
+      districtDropdown.add(new Option(dist, dist));
+    });
   }
 }
 
@@ -1239,7 +1255,7 @@ async function editListing(id) {
     renderImagePreviews()
     const postProvince = document.getElementById("post-province")
     postProvince.value = listing.province
-    populateDistrictDropdowns(listing.province)
+    populateDistrictDropdowns(listing.province, "post-district")
     setTimeout(() => {
       const postDistrict = document.getElementById("post-district")
       postDistrict.value = listing.district
@@ -2355,19 +2371,24 @@ function router() {
 }
 
 function updateFilterUIFromParams(params) {
-  document.getElementById("province-filter").value = params.get("province") || ""
-  const province = params.get("province")
-  if (province && thailandData && thailandData[province]) {
-    const districtFilter = document.getElementById("district-filter")
-    districtFilter.length = 1
-    const districts = Object.keys(thailandData[province]).sort()
-    districts.forEach((dist) => districtFilter.add(new Option(dist, dist)))
-    districtFilter.value = params.get("district") || ""
-  } else {
-    document.getElementById("district-filter").length = 1
-  }
-  document.getElementById("type-filter").value = params.get("type") || ""
-  document.getElementById("max-price-filter").value = params.get("maxPrice") || ""
+  // 1. ตั้งค่าช่อง "จังหวัด" จากค่าใน URL
+  document.getElementById("province-filter").value = params.get("province") || "";
+  const province = params.get("province");
+
+  // 2. เรียกใช้ฟังก์ชันผู้ช่วยเพื่อสร้างรายการ "อำเภอ" ที่ถูกต้อง
+  // โดยส่งชื่อจังหวัดและ ID ของช่องอำเภอในฟิลเตอร์ ("district-filter") ไปให้
+  populateDistrictDropdowns(province, "district-filter");
+  
+  // 3. หน่วงเวลาเล็กน้อยเพื่อให้แน่ใจว่ารายการอำเภอถูกสร้างเสร็จ
+  setTimeout(() => {
+    // แล้วจึงตั้งค่าช่อง "อำเภอ" จากค่าใน URL
+    const districtFilter = document.getElementById("district-filter");
+    districtFilter.value = params.get("district") || "";
+  }, 50); // รอ 50 มิลลิวินาที
+
+  // 4. ตั้งค่าฟิลเตอร์ที่เหลือ (ประเภท และ ราคา) จากค่าใน URL
+  document.getElementById("type-filter").value = params.get("type") || "";
+  document.getElementById("max-price-filter").value = params.get("maxPrice") || "";
 }
 
 function resetFilterUI() {
@@ -2399,7 +2420,7 @@ function openModal(modalId) {
       postForm.reset()
       document.getElementById("post-modal-title").textContent = "ลงประกาศอสังหาริมทรัพย์"
       document.getElementById("post-id").value = ""
-      populateDistrictDropdowns("")
+      populateDistrictDropdowns("", "post-district")
       imagePreviewContainer.innerHTML = ""
       selectedFiles = []
       existingImageUrls = []
