@@ -488,41 +488,52 @@ const handleLogout = async () => {
 
 // =================================================================
 // --- IMAGE UPLOAD ---
-// This function now uses the ImgBB API.
+// This function now sends images to our own serverless function
+// which then calls the ImgBB API securely.
 // =================================================================
 async function uploadImages(files) {
-  // !!! IMPORTANT: This API key is now public in your code.
-  // For better security, please regenerate a new key at api.imgbb.com
-  // and replace this one.
-  const IMGBB_API_KEY = "229500d855ee4e02480b36c4a417c30a"
+  const uploadPromises = Array.from(files).map(file => {
+    // We wrap the FileReader in a Promise to handle the async conversion
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
 
-  const uploadPromises = Array.from(files).map((file) => {
-    const formData = new FormData()
-    formData.append("key", IMGBB_API_KEY)
-    formData.append("image", file)
+      // This event fires when the file is successfully read
+      reader.onload = async () => {
+        // The result is a Base64 string like "data:image/jpeg;base64,..."
+        // We need to strip the prefix, as the API wants only the raw data
+        const base64String = reader.result.split(',')[1];
 
-    return fetch("https://api.imgbb.com/1/upload", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((errorData) => {
-            throw new Error(errorData.error?.message || "ImgBB upload failed")
-          })
+        try {
+          // Call our own backend function, not the ImgBB API directly
+          const response = await fetch("/.netlify/functions/upload", {
+            method: "POST",
+            body: JSON.stringify({ imageBase64: base64String }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok || !result.success) {
+            // If our function returned an error, we reject the promise
+            reject(new Error(result.error || "Upload failed"));
+          } else {
+            // If successful, resolve the promise with the image URL
+            resolve(result.data.url);
+          }
+        } catch (error) {
+          console.error("Fetch to our backend failed:", error);
+          reject(error);
         }
-        return response.json()
-      })
-      .then((result) => {
-        if (result.success) {
-          return result.data.url // Return the image URL
-        } else {
-          throw new Error("ImgBB returned success:false")
-        }
-      })
-  })
+      };
 
-  return Promise.all(uploadPromises)
+      // This event fires if there's an error reading the file
+      reader.onerror = (error) => reject(error);
+
+      // Start reading the file. This will trigger either onload or onerror.
+      reader.readAsDataURL(file);
+    });
+  });
+
+  return Promise.all(uploadPromises);
 }
 
 imageUploadInput.addEventListener("change", () => {
