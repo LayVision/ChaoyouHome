@@ -192,7 +192,13 @@ async function fetchThailandData() {
       "https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province_with_amphure_tambon.json",
     )
     if (!response.ok) throw new Error("Network response was not ok")
-    const data = await response.json()
+    let data = await response.json()
+
+    // --- NEW CODE START ---
+    // กรองข้อมูลให้เหลือเฉพาะจังหวัดเชียงใหม่
+    const chiangMaiData = data.filter(province => province.name_th === "เชียงใหม่");
+    data = chiangMaiData; // ใช้ข้อมูลที่กรองแล้วมาทำงานต่อ
+    // --- NEW CODE END ---
 
     thailandData = data.reduce((acc, province) => {
       acc[province.name_th] = province.amphure.reduce((amphureAcc, amphure) => {
@@ -205,7 +211,9 @@ async function fetchThailandData() {
     populateProvinceDropdowns()
   } catch (error) {
     console.error("Failed to fetch Thailand location data:", error)
-    thailandData = { กรุงเทพมหานคร: { เขตพระนคร: ["พระบรมมหาราชวัง"] } }
+    // --- MODIFIED LINE ---
+    // แก้ไขข้อมูลสำรองให้เป็นของเชียงใหม่ ในกรณีที่โหลดข้อมูลหลักไม่สำเร็จ
+    thailandData = { "เชียงใหม่": { "เมืองเชียงใหม่": ["ศรีภูมิ"] } }
     populateProvinceDropdowns()
   }
 }
