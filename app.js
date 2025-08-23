@@ -839,6 +839,14 @@ function renderBoostedPaginationControls() {
       const params = new URLSearchParams(window.location.hash.substring(window.location.hash.indexOf("?")))
       params.set("boostedPage", i)
       window.location.hash = `home?${params.toString()}`
+      
+      // THIS IS THE NEW PART: Scroll to the boosted listings container
+      setTimeout(() => {
+        const targetElement = document.getElementById("boosted-listings-container");
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
     }
     paginationContainer.appendChild(pageButton)
   }
@@ -872,6 +880,14 @@ function renderGeneralPaginationControls() {
         params.set("generalPage", i)
         window.location.hash = `home?${params.toString()}`
       }
+
+      // THIS IS THE NEW PART: Scroll to the general listings container
+      setTimeout(() => {
+        const targetElement = document.getElementById("general-listings-container");
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
     }
     paginationContainer.appendChild(pageButton)
   }
