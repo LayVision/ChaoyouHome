@@ -377,3 +377,19 @@ button:active {
   background: rgba(14, 165, 233, 0.2);
   color: #0f172a;
 }
+
+/* ============================================================= */
+/* === ขั้นตอนที่ 2: เพิ่มโค้ดนี้ที่ท้ายไฟล์ style.css === */
+/* ============================================================= */
+
+/* Premium styling for blocked user rows in admin panel */
+.blocked-user-row {
+  background-color: #fef2f2; /* A very light red */
+  opacity: 0.8;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.blocked-user-row:hover {
+  opacity: 1;
+  background-color: #fee2e2; /* A slightly darker red on hover */
+}

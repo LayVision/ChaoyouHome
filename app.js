@@ -727,6 +727,14 @@ postForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  // --- START: NEW CODE ---
+  // ตรวจสอบว่าผู้ใช้ถูกบล็อกหรือไม่
+  if (currentUser.isBlocked) {
+    showAlertModal("บัญชีของคุณถูกระงับ ไม่สามารถสร้างหรือแก้ไขประกาศได้");
+    return;
+  }
+  // --- END: NEW CODE ---
+
   const title = document.getElementById("post-title").value.trim();
   const priceRent = document.getElementById("post-price-rent").value;
   const province = document.getElementById("post-province").value;
@@ -828,53 +836,68 @@ postForm.addEventListener("submit", async (e) => {
 });
 
 async function fetchListings(filters = {}, fromListing = false) {
-  loadingSpinner.style.display = "block"
-  listingsGrid.innerHTML = ""
-  generalListingsGrid.innerHTML = ""
+  loadingSpinner.style.display = "block";
+  listingsGrid.innerHTML = "";
+  generalListingsGrid.innerHTML = "";
   try {
-    const querySnapshot = await getDocs(query(listingsCollection))
-    const allListings = []
-    querySnapshot.forEach((doc) => {
-      allListings.push({ id: doc.id, ...doc.data() })
-    })
+    // --- START: NEW CODE ---
+    // 1. ดึงรายชื่อ UID ของผู้ใช้ที่ถูกบล็อกทั้งหมด
+    const blockedUsersQuery = query(usersCollection, where("isBlocked", "==", true));
+    const blockedUsersSnapshot = await getDocs(blockedUsersQuery);
+    const blockedUserIds = new Set();
+    blockedUsersSnapshot.forEach(doc => {
+      blockedUserIds.add(doc.id);
+    });
+    // --- END: NEW CODE ---
 
-    const now = new Date()
+    const querySnapshot = await getDocs(query(listingsCollection));
+    const allListings = [];
+    querySnapshot.forEach((doc) => {
+      allListings.push({ id: doc.id, ...doc.data() });
+    });
+
+    const now = new Date();
     const filteredListings = allListings.filter((l) => {
-      const provinceMatch = !filters.province || l.province === filters.province
-      const districtMatch = !filters.district || l.district === filters.district
-      const typeMatch = !filters.type || l.type === filters.type
-      const priceMatch = !filters.maxPrice || (l.priceRent > 0 && l.priceRent <= filters.maxPrice)
-      return provinceMatch && districtMatch && typeMatch && priceMatch
-    })
+      // --- START: MODIFIED LINE ---
+      // 2. เพิ่มเงื่อนไขการกรอง: โพสต์ต้องไม่ได้มาจากผู้ใช้ที่ถูกบล็อก
+      const isNotBlocked = !blockedUserIds.has(l.ownerUid);
+      // --- END: MODIFIED LINE ---
+      const provinceMatch = !filters.province || l.province === filters.province;
+      const districtMatch = !filters.district || l.district === filters.district;
+      const typeMatch = !filters.type || l.type === filters.type;
+      const priceMatch = !filters.maxPrice || (l.priceRent > 0 && l.priceRent <= filters.maxPrice);
+      
+      // --- START: MODIFIED LINE ---
+      return isNotBlocked && provinceMatch && districtMatch && typeMatch && priceMatch;
+      // --- END: MODIFIED LINE ---
+    });
 
     filteredListings.forEach((l) => {
       if (l.isBoosted && l.boostExpiryDate && l.boostExpiryDate.toDate() < now) {
-        l.isBoosted = false
+        l.isBoosted = false;
       }
-    })
+    });
 
-    // MODIFIED: Sort by boosted status first, then by original creation date.
-    // This prevents edited posts from moving to the top.
     filteredListings.sort((a, b) => {
-      if (a.isBoosted && !b.isBoosted) return -1
-      if (!a.isBoosted && b.isBoosted) return 1
-      const createdAtA = a.createdAt?.toMillis() || 0
-      const createdAtB = b.createdAt?.toMillis() || 0
-      return createdAtB - createdAtA
-    })
-    renderListings(filteredListings, Object.keys(filters).length > 0 && Object.values(filters).some((v) => v))
+      if (a.isBoosted && !b.isBoosted) return -1;
+      if (!a.isBoosted && b.isBoosted) return 1;
+      const createdAtA = a.createdAt?.toMillis() || 0;
+      const createdAtB = b.createdAt?.toMillis() || 0;
+      return createdAtB - createdAtA;
+    });
+    renderListings(filteredListings, Object.keys(filters).length > 0 && Object.values(filters).some((v) => v));
   } catch (error) {
-    console.error("Error fetching listings: ", error)
-    listingsGrid.innerHTML = `<p class="col-span-full text-center text-rose-600">เกิดข้อผิดพลาด: ${error.message}</p>`
+    console.error("Error fetching listings: ", error);
+    listingsGrid.innerHTML = `<p class="col-span-full text-center text-rose-600">เกิดข้อผิดพลาด: ${error.message}</p>`;
   } finally {
-    loadingSpinner.style.display = "none"
+    loadingSpinner.style.display = "none";
     if (fromListing) {
       setTimeout(() => {
-        const targetElement = document.getElementById("general-listings-container")
+        const targetElement = document.getElementById("general-listings-container");
         if (targetElement) {
-          targetElement.scrollIntoView({ behavior: "smooth" })
+          targetElement.scrollIntoView({ behavior: "smooth" });
         }
-      }, 100)
+      }, 100);
     }
   }
 }
@@ -1289,6 +1312,13 @@ async function renderListingDetailPage(listingId) {
 }
 
 async function editListing(id) {
+  // --- START: NEW CODE ---
+  if (currentUser && currentUser.isBlocked) {
+      showAlertModal("บัญชีของคุณถูกระงับ ไม่สามารถแก้ไขประกาศได้");
+      return;
+  }
+  // --- END: NEW CODE ---
+
   const docRef = doc(db, "listings", id)
   const docSnap = await getDoc(docRef)
   if (docSnap.exists()) {
@@ -1463,6 +1493,33 @@ document.getElementById("confirm-payment-button").addEventListener("click", asyn
     confirmBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>ยืนยันการชำระเงิน'
   }
 })
+
+// ==============================================================================
+// === ADMIN FUNCTIONS ===
+// ==============================================================================
+
+async function toggleUserBlockStatus(userId, currentStatus) {
+  const actionText = currentStatus ? "ปลดบล็อก" : "บล็อก";
+  const confirmButtonClass = currentStatus ? "bg-emerald-600 hover:bg-emerald-700" : "bg-rose-600 hover:bg-rose-700";
+
+  openConfirmModal(
+    `คุณแน่ใจหรือไม่ว่าต้องการ${actionText}ผู้ใช้รายนี้?`,
+    async () => {
+      try {
+        const userDocRef = doc(db, "users", userId);
+        await updateDoc(userDocRef, {
+          isBlocked: !currentStatus, // สลับค่าสถานะ
+        });
+        showAlertModal(`${actionText}ผู้ใช้สำเร็จ!`);
+        renderAdminView("users"); // รีเฟรชตารางผู้ใช้
+      } catch (error) {
+        console.error(`Error ${actionText}ing user:`, error);
+        showAlertModal("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+      }
+    },
+    confirmButtonClass
+  );
+}
 
 async function renderAdminView(activeTab = "dashboard") {
   const adminMainContent = document.getElementById("admin-main-content")
@@ -1683,31 +1740,68 @@ async function renderAdminUsersTable() {
   }
 }
 function populateAdminUsersTable(container, users) {
-  container.innerHTML = ""
+  container.innerHTML = "";
   if (users.length === 0) {
-    container.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่พบผู้ใช้</p>`
-    return
+    container.innerHTML = `<p class="text-center text-slate-500 p-4">ไม่พบผู้ใช้</p>`;
+    return;
   }
-  const table = createElement("table", ["w-full", "text-sm", "text-left", "text-slate-600"])
-  table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">Username</th><th class="p-3">อีเมล</th><th class="p-3">วันที่สมัคร</th><th class="p-3">จัดการ</th></tr></thead>`
-  const tbody = createElement("tbody")
+  const table = createElement("table", ["w-full", "text-sm", "text-left", "text-slate-600"]);
+  // --- START: MODIFIED LINE ---
+  table.innerHTML = `<thead class="bg-slate-50 text-slate-700"><tr><th class="p-3">Username</th><th class="p-3">อีเมล</th><th class="p-3">วันที่สมัคร</th><th class="p-3">สถานะ</th><th class="p-3">จัดการ</th></tr></thead>`;
+  // --- END: MODIFIED LINE ---
+  const tbody = createElement("tbody");
   users.forEach((user) => {
-    const tr = createElement("tr", ["border-b", "border-slate-200"])
-    tr.appendChild(createElement("td", ["p-3", "font-medium", "text-slate-800"], user.username))
-    tr.appendChild(createElement("td", ["p-3"], user.email))
-    tr.appendChild(createElement("td", ["p-3"], formatTimestamp(user.createdAt, true)))
-    const actionsCell = createElement("td", ["p-3"])
+    // --- START: MODIFIED LINE ---
+    const tr = createElement("tr", ["border-b", "border-slate-200"]);
+    if (user.isBlocked) {
+      tr.classList.add("blocked-user-row"); // เพิ่ม class สำหรับ CSS
+    }
+    // --- END: MODIFIED LINE ---
+    tr.appendChild(createElement("td", ["p-3", "font-medium", "text-slate-800"], user.username));
+    tr.appendChild(createElement("td", ["p-3"], user.email));
+    tr.appendChild(createElement("td", ["p-3"], formatTimestamp(user.createdAt, true)));
+
+    // --- START: NEW CODE ---
+    // เพิ่มคอลัมน์ "สถานะ"
+    const statusCell = createElement("td", ["p-3"]);
+    if (user.isBlocked) {
+      const statusBadge = createElement("span", ["px-2", "py-1", "text-xs", "font-semibold", "text-red-800", "bg-red-200", "rounded-full"], "ถูกบล็อก");
+      statusCell.appendChild(statusBadge);
+    } else {
+      const statusBadge = createElement("span", ["px-2", "py-1", "text-xs", "font-semibold", "text-emerald-800", "bg-emerald-200", "rounded-full"], "ปกติ");
+      statusCell.appendChild(statusBadge);
+    }
+    tr.appendChild(statusCell);
+    // --- END: NEW CODE ---
+
+    const actionsCell = createElement("td", ["p-3", "flex", "items-center", "gap-2"]);
     const viewProfileBtn = createElement("button", ["text-indigo-600", "hover:text-indigo-800"], " ดูโปรไฟล์", {
       title: "ดูโปรไฟล์",
-    })
-    viewProfileBtn.prepend(createElement("i", ["fas", "fa-user-circle", "mr-1"]))
-    viewProfileBtn.onclick = () => navigateToProfile(user.id)
-    actionsCell.append(viewProfileBtn)
-    tr.appendChild(actionsCell)
-    tbody.appendChild(tr)
-  })
-  table.appendChild(tbody)
-  container.appendChild(table)
+    });
+    viewProfileBtn.prepend(createElement("i", ["fas", "fa-user-circle", "mr-1"]));
+    viewProfileBtn.onclick = () => navigateToProfile(user.id);
+    
+    // --- START: NEW CODE ---
+    // เพิ่มปุ่ม บล็อก/ปลดบล็อก
+    const isBlocked = user.isBlocked === true;
+    const blockBtn = createElement(
+      "button",
+      [
+        "px-3", "py-1", "rounded", "text-white", "text-xs", "font-bold",
+        isBlocked ? "bg-emerald-500" : "bg-rose-500",
+        isBlocked ? "hover:bg-emerald-600" : "hover:bg-rose-600",
+      ],
+      isBlocked ? "ปลดบล็อก" : "บล็อก"
+    );
+    blockBtn.onclick = () => toggleUserBlockStatus(user.id, isBlocked);
+    // --- END: NEW CODE ---
+    
+    actionsCell.append(viewProfileBtn, blockBtn); // เพิ่มปุ่มใหม่เข้าไป
+    tr.appendChild(actionsCell);
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  container.appendChild(table);
 }
 async function renderAdminBoostsTable() {
   const adminMainContent = document.getElementById("admin-main-content")
