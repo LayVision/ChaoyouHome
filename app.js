@@ -185,6 +185,67 @@ function formatTimeRemaining(expiryDate) {
   return result.trim()
 }
 
+/**
+ * สร้างชุดควบคุมการแบ่งหน้าที่ซับซ้อนและตอบสนองได้ดี
+ * @param {number} totalPages จำนวนหน้าทั้งหมด
+ * @param {number} currentPage หน้าที่กำลังใช้งานอยู่
+ * @param {HTMLElement} container Element ที่จะใส่ปุ่ม pagination
+ * @param {Function} pageClickHandler ฟังก์ชันที่จะถูกเรียกเมื่อมีการคลิกปุ่ม (รับ page number เป็นพารามิเตอร์)
+ */
+function createAdvancedPagination(totalPages, currentPage, container, pageClickHandler) {
+  container.innerHTML = ""
+  if (totalPages <= 1) return
+
+  const createButton = (text, page, isDisabled = false, isActive = false) => {
+    const btn = document.createElement(isDisabled ? "span" : "button")
+    // NOTE: Assumes 'pagination-btn' and 'active' classes are defined in style.css
+    btn.className = "pagination-btn"
+    btn.textContent = text
+    if (isActive) {
+      btn.classList.add("active")
+    }
+    if (isDisabled) {
+      btn.classList.add("opacity-50", "cursor-not-allowed")
+      btn.style.background = "#e2e8f0" // A slightly different background for disabled state
+      btn.style.borderColor = "#cbd5e1"
+      btn.style.color = "#64748b"
+    } else {
+      btn.onclick = () => pageClickHandler(page)
+    }
+    return btn
+  }
+
+  const wrapper = createElement("div", ["flex", "flex-wrap", "justify-center", "items-center", "gap-2"])
+
+  // ปุ่ม "หน้าก่อน"
+  wrapper.appendChild(createButton("‹", currentPage - 1, currentPage === 1))
+
+  const pagesToShow = new Set()
+  const range = 1 // จำนวนหน้าที่แสดงก่อนและหลังหน้าปัจจุบัน
+
+  pagesToShow.add(1)
+  pagesToShow.add(totalPages)
+  pagesToShow.add(currentPage)
+  for (let i = 1; i <= range; i++) {
+    if (currentPage - i > 0) pagesToShow.add(currentPage - i)
+    if (currentPage + i <= totalPages) pagesToShow.add(currentPage + i)
+  }
+  const sortedPages = Array.from(pagesToShow).sort((a, b) => a - b)
+  let lastPage = 0
+  sortedPages.forEach((page) => {
+    if (page > lastPage + 1) {
+      const ellipsis = createElement("span", ["pagination-btn", "opacity-50"], "...")
+      ellipsis.style.background = "transparent"
+      ellipsis.style.border = "none"
+      wrapper.appendChild(ellipsis)
+    }
+    wrapper.appendChild(createButton(page, page, false, page === currentPage))
+    lastPage = page
+  })
+  wrapper.appendChild(createButton("›", currentPage + 1, currentPage === totalPages))
+  container.appendChild(wrapper)
+}
+
 // --- LOCATION DATA HANDLING ---
 async function fetchThailandData() {
   try {
@@ -863,75 +924,50 @@ function renderPaginatedGeneralListings() {
 
 function renderBoostedPaginationControls() {
   const paginationContainer = document.getElementById("boosted-pagination-container")
-  paginationContainer.innerHTML = ""
   const totalPages = Math.ceil(currentBoostedListings.length / listingsPerPage)
 
-  if (totalPages <= 1) return
+  const handlePageClick = (page) => {
+    const params = new URLSearchParams(window.location.hash.substring(window.location.hash.indexOf("?")))
+    params.set("boostedPage", page)
+    window.location.hash = `home?${params.toString()}`
 
-  for (let i = 1; i <= totalPages; i++) {
-    const pageButton = createElement("button", ["px-4", "py-2", "border", "rounded-md", "transition-colors", "text-sm"])
-    pageButton.textContent = i
-    if (i === boostedListingsCurrentPage) {
-      pageButton.classList.add("bg-indigo-600", "text-white", "border-indigo-600")
-    } else {
-      pageButton.classList.add("bg-white", "text-slate-700", "hover:bg-slate-100", "border-slate-300")
-    }
-    pageButton.onclick = () => {
-      const params = new URLSearchParams(window.location.hash.substring(window.location.hash.indexOf("?")))
-      params.set("boostedPage", i)
-      window.location.hash = `home?${params.toString()}`
-
-      // THIS IS THE NEW PART: Scroll to the boosted listings container
-      setTimeout(() => {
-        const targetElement = document.getElementById("boosted-listings-container");
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
-    }
-    paginationContainer.appendChild(pageButton)
+    setTimeout(() => {
+      const targetElement = document.getElementById("boosted-listings-container")
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" })
+      }
+    }, 100)
   }
+
+  createAdvancedPagination(totalPages, boostedListingsCurrentPage, paginationContainer, handlePageClick)
 }
 
 function renderGeneralPaginationControls() {
   const paginationContainer = document.getElementById("pagination-container")
-  paginationContainer.innerHTML = ""
   const totalPages = Math.ceil(currentGeneralListings.length / listingsPerPage)
 
-  if (totalPages <= 1) return
-
-  for (let i = 1; i <= totalPages; i++) {
-    const pageButton = createElement("button", ["px-4", "py-2", "border", "rounded-md", "transition-colors", "text-sm"])
-    pageButton.textContent = i
-    if (i === generalListingsCurrentPage) {
-      pageButton.classList.add("bg-indigo-600", "text-white", "border-indigo-600")
+  const handlePageClick = (page) => {
+    const currentHash = window.location.hash
+    if (currentHash.startsWith("#search/")) {
+      const queryString = currentHash.substring("#search/".length)
+      const params = new URLSearchParams(queryString)
+      params.set("page", page)
+      window.location.hash = `search/${params.toString()}`
     } else {
-      pageButton.classList.add("bg-white", "text-slate-700", "hover:bg-slate-100", "border-slate-300")
+      const params = new URLSearchParams(currentHash.substring(currentHash.indexOf("?")))
+      params.set("generalPage", page)
+      window.location.hash = `home?${params.toString()}`
     }
-    pageButton.onclick = () => {
-      const currentHash = window.location.hash
-      if (currentHash.startsWith("#search/")) {
-        const queryString = currentHash.substring("#search/".length)
-        const params = new URLSearchParams(queryString)
-        params.set("page", i)
-        window.location.hash = `search/${params.toString()}`
-      } else {
-        // Home page
-        const params = new URLSearchParams(currentHash.substring(currentHash.indexOf("?")))
-        params.set("generalPage", i)
-        window.location.hash = `home?${params.toString()}`
-      }
 
-      // THIS IS THE NEW PART: Scroll to the general listings container
-      setTimeout(() => {
-        const targetElement = document.getElementById("general-listings-container");
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
-    }
-    paginationContainer.appendChild(pageButton)
+    setTimeout(() => {
+      const targetElement = document.getElementById("general-listings-container")
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" })
+      }
+    }, 100)
   }
+
+  createAdvancedPagination(totalPages, generalListingsCurrentPage, paginationContainer, handlePageClick)
 }
 
 function populateGrid(gridElement, listings, emptyMessage) {
@@ -1597,27 +1633,13 @@ function populateAdminListingsTable(tableContainer, paginationContainer, listing
 }
 // NEW: Function to render pagination controls for the admin listings table
 function renderAdminListingsPagination(paginationContainer, totalListings) {
-  paginationContainer.innerHTML = ""
   const totalPages = Math.ceil(totalListings / adminListingsPerPage)
 
-  if (totalPages <= 1) return
-
-  const paginationWrapper = createElement("div", ["flex", "justify-center", "items-center", "mt-6", "gap-2"])
-
-  for (let i = 1; i <= totalPages; i++) {
-    const pageButton = createElement("button", ["px-4", "py-2", "border", "rounded-md", "transition-colors", "text-sm"])
-    pageButton.textContent = i
-    if (i === adminListingsCurrentPage) {
-      pageButton.classList.add("bg-indigo-600", "text-white", "border-indigo-600")
-    } else {
-      pageButton.classList.add("bg-white", "text-slate-700", "hover:bg-slate-100", "border-slate-300")
-    }
-    pageButton.onclick = () => {
-      window.location.hash = `#admin/listings?page=${i}`
-    }
-    paginationWrapper.appendChild(pageButton)
+  const handlePageClick = (page) => {
+    window.location.hash = `#admin/listings?page=${page}`
   }
-  paginationContainer.appendChild(paginationWrapper)
+
+  createAdvancedPagination(totalPages, adminListingsCurrentPage, paginationContainer, handlePageClick)
 }
 async function renderAdminUsersTable() {
   const adminMainContent = document.getElementById("admin-main-content")
@@ -1928,21 +1950,11 @@ function populateAdminBoostedTable(container, listings) {
 }
 
 function renderProfilePagination(container, totalPages, userId) {
-  container.innerHTML = ""
-  if (totalPages <= 1) return
-  for (let i = 1; i <= totalPages; i++) {
-    const pageButton = createElement("button", ["px-4", "py-2", "border", "rounded-md", "transition-colors", "text-sm"])
-    pageButton.textContent = i
-    if (i === profileCurrentPage) {
-      pageButton.classList.add("bg-indigo-600", "text-white", "border-indigo-600")
-    } else {
-      pageButton.classList.add("bg-white", "text-slate-700", "hover:bg-slate-100", "border-slate-300")
-    }
-    pageButton.onclick = () => {
-      window.location.hash = `#profile/${userId}?page=${i}`
-    }
-    container.appendChild(pageButton)
+  const handlePageClick = (page) => {
+    window.location.hash = `#profile/${userId}?page=${page}`
   }
+
+  createAdvancedPagination(totalPages, profileCurrentPage, container, handlePageClick)
 }
 async function renderProfilePage(userId) {
   profileView.innerHTML = `<div class="text-center p-10"><i class="fas fa-spinner fa-spin text-3xl"></i></div>`
