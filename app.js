@@ -721,67 +721,67 @@ function renderImagePreviews() {
 
 // --- FIRESTORE (LISTINGS) ---
 postForm.addEventListener("submit", async (e) => {
-  e.preventDefault()
+  e.preventDefault();
   if (!currentUser) {
-    showAlertModal("กรุณาเข้าสู่ระบบก่อนลงประกาศ")
-    return
+    showAlertModal("กรุณาเข้าสู่ระบบก่อนลงประกาศ");
+    return;
   }
 
-  const title = document.getElementById("post-title").value.trim()
-  const priceRent = document.getElementById("post-price-rent").value
-  const province = document.getElementById("post-province").value
-  const district = document.getElementById("post-district").value
-  const description = document.getElementById("post-description").value.trim()
-  const phone = document.getElementById("post-phone").value.trim()
-  const lineId = document.getElementById("post-line-id").value.trim()
-  const totalImages = existingImageUrls.length + selectedFiles.length
+  const title = document.getElementById("post-title").value.trim();
+  const priceRent = document.getElementById("post-price-rent").value;
+  const province = document.getElementById("post-province").value;
+  const district = document.getElementById("post-district").value;
+  const description = document.getElementById("post-description").value.trim();
+  const phone = document.getElementById("post-phone").value.trim();
+  const lineId = document.getElementById("post-line-id").value.trim();
+  const totalImages = existingImageUrls.length + selectedFiles.length;
 
   if (!title) {
-    showAlertModal('กรุณากรอก "หัวข้อประกาศ"')
-    return
+    showAlertModal('กรุณากรอก "หัวข้อประกาศ"');
+    return;
   }
   if (!priceRent || Number(priceRent) <= 0) {
-    showAlertModal('กรุณากรอก "ราคาเช่า" ให้ถูกต้อง')
-    return
+    showAlertModal('กรุณากรอก "ราคาเช่า" ให้ถูกต้อง');
+    return;
   }
   if (!province) {
-    showAlertModal('กรุณาเลือก "จังหวัด"')
-    return
+    showAlertModal('กรุณาเลือก "จังหวัด"');
+    return;
   }
   if (!district) {
-    showAlertModal('กรุณาเลือก "อำเภอ/เขต"')
-    return
+    showAlertModal('กรุณาเลือก "อำเภอ/เขต"');
+    return;
   }
   if (!description) {
-    showAlertModal('กรุณากรอก "รายละเอียดเพิ่มเติม"')
-    return
+    showAlertModal('กรุณากรอก "รายละเอียดเพิ่มเติม"');
+    return;
   }
   if (totalImages === 0) {
-    showAlertModal("กรุณาอัปโหลดรูปภาพอย่างน้อย 1 รูป")
-    return
+    showAlertModal("กรุณาอัปโหลดรูปภาพอย่างน้อย 1 รูป");
+    return;
   }
-  if (!phone) {
-    showAlertModal('กรุณากรอก "เบอร์โทรศัพท์"')
-    return
+  
+  // --- START: ส่วนที่แก้ไข ---
+  // ตรวจสอบว่ามีข้อมูลการติดต่ออย่างน้อย 1 อย่างหรือไม่
+  if (!phone && !lineId) {
+    showAlertModal('กรุณากรอกข้อมูลติดต่ออย่างน้อย 1 อย่าง (เบอร์โทรศัพท์ หรือ Line ID)');
+    return;
   }
-  if (!lineId) {
-    showAlertModal('กรุณากรอก "Line ID"')
-    return
-  }
+  // --- END: ส่วนที่แก้ไข ---
 
-  postSubmitButton.disabled = true
-  postSubmitButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>กำลังบันทึก...`
+  postSubmitButton.disabled = true;
+  postSubmitButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>กำลังบันทึก...`;
 
   try {
-    let newImageUrls = []
-    const postId = document.getElementById("post-id").value
+    let newImageUrls = [];
+    const postId = document.getElementById("post-id").value;
     if (selectedFiles.length > 0) {
-      newImageUrls = await uploadImages(selectedFiles)
+      newImageUrls = await uploadImages(selectedFiles);
     }
-    const finalImageUrls = [...existingImageUrls, ...newImageUrls]
+    const finalImageUrls = [...existingImageUrls, ...newImageUrls];
 
     if (finalImageUrls.length === 0) {
-      throw new Error("กรุณาอัปโหลดรูปภาพอย่างน้อย 1 รูป")
+      throw new Error("กรุณาอัปโหลดรูปภาพอย่างน้อย 1 รูป");
     }
 
     const listingData = {
@@ -794,38 +794,38 @@ postForm.addEventListener("submit", async (e) => {
       district: district,
       description: description,
       imageUrls: finalImageUrls,
-      phone: phone,
-      lineId: lineId,
+      phone: phone, // บันทึกค่า phone แม้จะเป็นค่าว่าง
+      lineId: lineId, // บันทึกค่า lineId แม้จะเป็นค่าว่าง
       ownerUid: currentUser.uid,
       ownerEmail: currentUser.email,
       ownerUsername: currentUser.username,
       updatedAt: serverTimestamp(),
-    }
+    };
 
     if (postId) {
-      const docRef = doc(db, "listings", postId)
-      await updateDoc(docRef, listingData)
+      const docRef = doc(db, "listings", postId);
+      await updateDoc(docRef, listingData);
     } else {
-      listingData.createdAt = serverTimestamp()
-      listingData.isBoosted = false
-      listingData.boostStatus = "none"
-      await addDoc(listingsCollection, listingData)
+      listingData.createdAt = serverTimestamp();
+      listingData.isBoosted = false;
+      listingData.boostStatus = "none";
+      await addDoc(listingsCollection, listingData);
     }
-    closeModal("postModal")
-    postForm.reset()
-    imagePreviewContainer.innerHTML = ""
-    selectedFiles = []
-    existingImageUrls = []
-    fetchListings()
-    showAlertModal("บันทึกประกาศสำเร็จ!")
+    closeModal("postModal");
+    postForm.reset();
+    imagePreviewContainer.innerHTML = "";
+    selectedFiles = [];
+    existingImageUrls = [];
+    fetchListings();
+    showAlertModal("บันทึกประกาศสำเร็จ!");
   } catch (error) {
-    console.error("Error saving listing:", error)
-    document.getElementById("post-error").textContent = "เกิดข้อผิดพลาด: " + error.message
+    console.error("Error saving listing:", error);
+    document.getElementById("post-error").textContent = "เกิดข้อผิดพลาด: " + error.message;
   } finally {
-    postSubmitButton.disabled = false
-    postSubmitButton.textContent = `บันทึกประกาศ`
+    postSubmitButton.disabled = false;
+    postSubmitButton.textContent = `บันทึกประกาศ`;
   }
-})
+});
 
 async function fetchListings(filters = {}, fromListing = false) {
   loadingSpinner.style.display = "block"
