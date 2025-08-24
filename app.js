@@ -1048,22 +1048,22 @@ function getPriceDisplay(rent) {
 }
 
 async function renderListingDetailPage(listingId) {
-  listingDetailView.innerHTML = `<div class="text-center p-10"><i class="fas fa-spinner fa-spin text-3xl"></i></div>`
+  listingDetailView.innerHTML = `<div class="text-center p-10"><i class="fas fa-spinner fa-spin text-3xl"></i></div>`;
   try {
-    const docRef = doc(db, "listings", listingId)
-    const docSnap = await getDoc(docRef)
+    const docRef = doc(db, "listings", listingId);
+    const docSnap = await getDoc(docRef);
     if (!docSnap.exists()) {
-      listingDetailView.innerHTML = `<p class="text-center text-rose-600">ไม่พบประกาศนี้</p>`
-      return
+      listingDetailView.innerHTML = `<p class="text-center text-rose-600">ไม่พบประกาศนี้</p>`;
+      return;
     }
-    const listing = { id: docSnap.id, ...docSnap.data() }
-    listingDetailView.innerHTML = "" // Clear spinner
+    const listing = { id: docSnap.id, ...docSnap.data() };
+    listingDetailView.innerHTML = ""; // Clear spinner
 
-    const mainGrid = createElement("div", ["grid", "grid-cols-1", "lg:grid-cols-2", "gap-8", "mt-4"])
-    const imageCol = createElement("div")
-    const detailsCol = createElement("div")
+    const mainGrid = createElement("div", ["grid", "grid-cols-1", "lg:grid-cols-2", "gap-8", "mt-4"]);
+    const imageCol = createElement("div");
+    const detailsCol = createElement("div");
     const imageUrls =
-      listing.imageUrls?.length > 0 ? listing.imageUrls : ["https://placehold.co/800x600/e2e8f0/64748b?text=ไม่มีรูปภาพ"]
+      listing.imageUrls?.length > 0 ? listing.imageUrls : ["https://placehold.co/800x600/e2e8f0/64748b?text=ไม่มีรูปภาพ"];
     const mainImage = createElement(
       "img",
       [
@@ -1079,12 +1079,12 @@ async function renderListingDetailPage(listingId) {
       ],
       "",
       { id: "main-detail-image", src: imageUrls[0] },
-    )
-    mainImage.onclick = () => openLightbox(mainImage.src)
+    );
+    mainImage.onclick = () => openLightbox(mainImage.src);
     mainImage.onerror = () => {
-      mainImage.src = "https://placehold.co/800x600/e2e8f0/64748b?text=รูปภาพเสียหาย"
-    }
-    const thumbnailGrid = createElement("div", ["grid", "grid-cols-4", "gap-2"])
+      mainImage.src = "https://placehold.co/800x600/e2e8f0/64748b?text=รูปภาพเสียหาย";
+    };
+    const thumbnailGrid = createElement("div", ["grid", "grid-cols-4", "gap-2"]);
     imageUrls.forEach((url) => {
       const thumb = createElement(
         "img",
@@ -1101,12 +1101,12 @@ async function renderListingDetailPage(listingId) {
         ],
         "",
         { src: url },
-      )
-      thumb.onclick = () => (mainImage.src = url)
-      thumb.onerror = () => (thumb.style.display = "none")
-      thumbnailGrid.appendChild(thumb)
-    })
-    imageCol.append(mainImage, thumbnailGrid)
+      );
+      thumb.onclick = () => (mainImage.src = url);
+      thumb.onerror = () => (thumb.style.display = "none");
+      thumbnailGrid.appendChild(thumb);
+    });
+    imageCol.append(mainImage, thumbnailGrid);
 
     const detailsHeader = createElement("div", [
       "flex",
@@ -1116,14 +1116,14 @@ async function renderListingDetailPage(listingId) {
       "sm:items-center",
       "gap-2",
       "mb-2",
-    ])
+    ]);
     detailsHeader.appendChild(
       createElement(
         "span",
         ["bg-indigo-100", "text-indigo-800", "text-xs", "font-medium", "px-2.5", "py-0.5", "rounded", "self-start"],
         listing.type,
       ),
-    )
+    );
 
     const postedDateSpan = createElement(
       "span",
@@ -1133,22 +1133,20 @@ async function renderListingDetailPage(listingId) {
     postedDateSpan.prepend(createElement("i", ["fas", "fa-calendar-alt", "mr-1"]));
     detailsHeader.appendChild(postedDateSpan);
 
-    // MODIFIED: Removed the block that showed the "edited" timestamp.
-
-    detailsCol.appendChild(detailsHeader)
+    detailsCol.appendChild(detailsHeader);
     detailsCol.appendChild(
       createElement("h3", ["text-3xl", "font-bold", "mt-2", "mb-2", "break-words", "text-slate-800"], listing.title),
-    )
+    );
     const locationP = createElement(
       "p",
       ["text-lg", "text-slate-600", "mb-4"],
       `${listing.district}, ${listing.province}`,
-    )
-    locationP.prepend(createElement("i", ["fas", "fa-map-marker-alt", "mr-2"]))
-    detailsCol.appendChild(locationP)
+    );
+    locationP.prepend(createElement("i", ["fas", "fa-map-marker-alt", "mr-2"]));
+    detailsCol.appendChild(locationP);
     detailsCol.appendChild(
       createElement("p", ["text-3xl", "font-bold", "text-indigo-600", "mb-4"], getPriceDisplay(listing.priceRent)),
-    )
+    );
     if (listing.priceInitial > 0) {
       const initialPriceDiv = createElement("div", [
         "mt-4",
@@ -1157,18 +1155,18 @@ async function renderListingDetailPage(listingId) {
         "rounded-lg",
         "border",
         "border-slate-200",
-      ])
+      ]);
       const initialPriceP = createElement(
         "p",
         ["text-md", "text-slate-800"],
         `ราคาเข้าอยู่ครั้งแรก: ${listing.priceInitial.toLocaleString()} บาท`,
-      )
+      );
       initialPriceP.prepend(
         createElement("i", ["fas", "fa-file-invoice-dollar", "mr-2", "text-emerald-500"]),
         createElement("strong", [], ""),
-      )
-      initialPriceDiv.appendChild(initialPriceP)
-      detailsCol.appendChild(initialPriceDiv)
+      );
+      initialPriceDiv.appendChild(initialPriceP);
+      detailsCol.appendChild(initialPriceDiv);
     }
     if (listing.availableDate) {
       const availableDateDiv = createElement("div", [
@@ -1178,38 +1176,43 @@ async function renderListingDetailPage(listingId) {
         "rounded-lg",
         "border",
         "border-slate-200",
-      ])
+      ]);
       const availableDateP = createElement(
         "p",
         ["text-md", "text-slate-800"],
         `วันที่เข้าอยู่ได้: ${new Date(listing.availableDate).toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric", calendar: "buddhist" })}`,
-      )
+      );
       availableDateP.prepend(
         createElement("i", ["fas", "fa-calendar-check", "mr-2", "text-indigo-500"]),
         createElement("strong", [], ""),
-      )
-      availableDateDiv.appendChild(availableDateP)
-      detailsCol.appendChild(availableDateDiv)
+      );
+      availableDateDiv.appendChild(availableDateP);
+      detailsCol.appendChild(availableDateDiv);
     }
-    detailsCol.appendChild(createElement("h5", ["font-bold", "text-lg", "mt-6", "mb-2", "text-slate-800"], "รายละเอียด"))
+    detailsCol.appendChild(createElement("h5", ["font-bold", "text-lg", "mt-6", "mb-2", "text-slate-800"], "รายละเอียด"));
     detailsCol.appendChild(
       createElement("p", ["text-slate-700", "whitespace-pre-wrap", "break-words", "mb-6"], listing.description),
-    )
-    const contactBox = createElement("div", ["bg-slate-100", "p-4", "rounded-lg", "border", "border-slate-200"])
-    contactBox.appendChild(createElement("h5", ["font-bold", "text-lg", "mb-2", "text-slate-800"], "ข้อมูลติดต่อ"))
-    const ownerP = createElement("p", ["text-slate-800"])
-    ownerP.innerHTML = `<i class="fas fa-user mr-2"></i><a href="#" onclick="event.preventDefault(); navigateToProfile('${listing.ownerUid}')" class="text-indigo-600 hover:underline">${listing.ownerUsername || listing.ownerEmail}</a>`
-    contactBox.appendChild(ownerP)
-    const phoneP = createElement("p", ["text-slate-800"])
-    phoneP.innerHTML = `<i class="fas fa-phone mr-2"></i><a href="tel:${listing.phone}" class="text-indigo-600 hover:underline">${listing.phone || "-"}</a>`
-    contactBox.appendChild(phoneP)
-    const lineP = createElement("p", ["text-slate-800"])
-    lineP.innerHTML = `<i class="fab fa-line mr-2"></i><a href="https://line.me/ti/p/~${listing.lineId}" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:underline">${listing.lineId || "-"}</a>`
-    contactBox.appendChild(lineP)
-    detailsCol.appendChild(contactBox)
+    );
+    
+    // --- START: ส่วนที่แก้ไข ---
+    const contactBox = createElement("div", ["bg-slate-100", "p-4", "rounded-lg", "border", "border-slate-200"]);
+    contactBox.appendChild(createElement("h5", ["font-bold", "text-lg", "mb-2", "text-slate-800"], "ข้อมูลติดต่อ"));
+    
+    // บรรทัดที่แสดงชื่อผู้ลงประกาศ (ownerP) ถูกลบออกจากส่วนนี้แล้ว
+    
+    const phoneP = createElement("p", ["text-slate-800"]);
+    phoneP.innerHTML = `<i class="fas fa-phone mr-2"></i><a href="tel:${listing.phone}" class="text-indigo-600 hover:underline">${listing.phone || "-"}</a>`;
+    contactBox.appendChild(phoneP);
+    
+    const lineP = createElement("p", ["text-slate-800"]);
+    lineP.innerHTML = `<i class="fab fa-line mr-2"></i><a href="https://line.me/ti/p/~${listing.lineId}" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:underline">${listing.lineId || "-"}</a>`;
+    contactBox.appendChild(lineP);
+    
+    detailsCol.appendChild(contactBox);
+    // --- END: ส่วนที่แก้ไข ---
 
     if (currentUser && (currentUser.uid === listing.ownerUid || currentUser.role === "admin")) {
-      const actionsDiv = createElement("div", ["mt-6", "flex", "flex-wrap", "gap-4"])
+      const actionsDiv = createElement("div", ["mt-6", "flex", "flex-wrap", "gap-4"]);
 
       const editBtn = createElement(
         "button",
@@ -1224,9 +1227,9 @@ async function renderListingDetailPage(listingId) {
           "transition-colors",
         ],
         "แก้ไข",
-      )
-      editBtn.prepend(createElement("i", ["fas", "fa-edit", "mr-2"]))
-      editBtn.onclick = () => editListing(listing.id)
+      );
+      editBtn.prepend(createElement("i", ["fas", "fa-edit", "mr-2"]));
+      editBtn.onclick = () => editListing(listing.id);
 
       const deleteBtn = createElement(
         "button",
@@ -1241,11 +1244,11 @@ async function renderListingDetailPage(listingId) {
           "transition-colors",
         ],
         "ลบ",
-      )
-      deleteBtn.prepend(createElement("i", ["fas", "fa-trash", "mr-2"]))
-      deleteBtn.onclick = () => deleteListing(listing.id)
+      );
+      deleteBtn.prepend(createElement("i", ["fas", "fa-trash", "mr-2"]));
+      deleteBtn.onclick = () => deleteListing(listing.id);
 
-      actionsDiv.append(editBtn, deleteBtn)
+      actionsDiv.append(editBtn, deleteBtn);
 
       const boostBtn = createElement("button", [
         "w-full",
@@ -1255,33 +1258,33 @@ async function renderListingDetailPage(listingId) {
         "rounded-md",
         "mt-2",
         "transition-colors",
-      ])
+      ]);
 
-      const now = new Date()
+      const now = new Date();
       const isBoostedAndActive =
-        listing.isBoosted && (!listing.boostExpiryDate || listing.boostExpiryDate.toDate() > now)
+        listing.isBoosted && (!listing.boostExpiryDate || listing.boostExpiryDate.toDate() > now);
 
       if (listing.boostStatus === "pending") {
-        boostBtn.innerHTML = '<i class="fas fa-clock mr-2"></i>รอการอนุมัติ'
-        boostBtn.classList.add("bg-amber-500", "cursor-not-allowed")
-        boostBtn.disabled = true
+        boostBtn.innerHTML = '<i class="fas fa-clock mr-2"></i>รอการอนุมัติ';
+        boostBtn.classList.add("bg-amber-500", "cursor-not-allowed");
+        boostBtn.disabled = true;
       } else if (isBoostedAndActive) {
-        boostBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>ดันโพสต์แล้ว'
-        boostBtn.classList.add("bg-slate-400", "cursor-not-allowed")
-        boostBtn.disabled = true
+        boostBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>ดันโพสต์แล้ว';
+        boostBtn.classList.add("bg-slate-400", "cursor-not-allowed");
+        boostBtn.disabled = true;
       } else {
-        boostBtn.innerHTML = '<i class="fas fa-rocket mr-2"></i>ดันโพสต์'
-        boostBtn.classList.add("bg-purple-600", "hover:bg-purple-700")
-        boostBtn.onclick = () => openBoostModal(listing.id)
+        boostBtn.innerHTML = '<i class="fas fa-rocket mr-2"></i>ดันโพสต์';
+        boostBtn.classList.add("bg-purple-600", "hover:bg-purple-700");
+        boostBtn.onclick = () => openBoostModal(listing.id);
       }
-      actionsDiv.appendChild(boostBtn)
-      detailsCol.appendChild(actionsDiv)
+      actionsDiv.appendChild(boostBtn);
+      detailsCol.appendChild(actionsDiv);
     }
-    mainGrid.append(imageCol, detailsCol)
-    listingDetailView.appendChild(mainGrid)
+    mainGrid.append(imageCol, detailsCol);
+    listingDetailView.appendChild(mainGrid);
   } catch (error) {
-    console.error("Error rendering listing page:", error)
-    listingDetailView.innerHTML = `<p class="text-center text-rose-600">เกิดข้อผิดพลาดในการโหลดข้อมูลประกาศ</p>`
+    console.error("Error rendering listing page:", error);
+    listingDetailView.innerHTML = `<p class="text-center text-rose-600">เกิดข้อผิดพลาดในการโหลดข้อมูลประกาศ</p>`;
   }
 }
 
